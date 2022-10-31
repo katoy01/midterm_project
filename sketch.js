@@ -5,26 +5,41 @@ let theWorld;
 
 let thePlayer;
 
+// room data - loaded in from an external file (see 'data/rooms.json')
+let roomData;
+
 // create an object to hold our "world parameters" - we will send this object into our
 // OverheadWorld to tell it how our world is organized
 let worldParameters = {
     tileSize: 50,
-    tileFolder: 'farming',
+    tileFolder: 'tiles',
     numTiles: 49,
     solidTiles: {0:true, 18:true, 6:true}
   };
 
   // handle the tile loading and creating our player object in preload before the game can start
 function preload() {
+    // load in room data
+    roomData = loadJSON("data/rooms.json");
     // theWorld = new OverheadWorld(worldParameters);
     // thePlayer = new Player(100, 100, theWorld);
 }
 
 function setup() {
-createCanvas(600,600);
+createCanvas(960,480);
 // 
-}
 
-function draw() {
-
-}
+}function allDone(worldData) {
+    console.log("here");
+  }
+  
+  function badStuffHappened(result) {
+    console.log(result);
+  }
+  
+  function draw() {
+    theWorld.displayWorld()
+    thePlayer.move();
+    thePlayer.display();
+  }
+  
