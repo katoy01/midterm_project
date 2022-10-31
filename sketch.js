@@ -5,7 +5,6 @@ let theWorld;
 
 let thePlayer;
 
-let tileMap;
 // room data - loaded in from an external file (see 'data/rooms.json')
 let roomData;
 
@@ -33,16 +32,13 @@ function setup() {
     createCanvas(960, 480);
 }
 
-function draw() {
-    background(0);
-    ellipse(width / 2, height / 2, 48, 48);
-}
-
 function setup() {
     createCanvas(960, 480);
     // 
 
-} function allDone(worldData) {
+}
+
+function allDone(worldData) {
     console.log("here");
 }
 
@@ -51,8 +47,7 @@ function badStuffHappened(result) {
 }
 
 function draw() {
-    theWorld.displayWorld()
-    thePlayer.move();
-    thePlayer.display();
+    background(0);
+    ellipse(width / 2, height / 2, 48, 48);
 }
 

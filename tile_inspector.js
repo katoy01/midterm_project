@@ -7,7 +7,7 @@ let cursorY = 0;
 let htmlElement;
 
 function preload() {
-  tilesetArtwork = loadImage('/farming/tiles.png');
+  tilesetArtwork = loadImage('/assets/tiles.png');
 }
 function setup() {
   createCanvas(864, 800);
