@@ -5,26 +5,33 @@ let theWorld;
 
 let thePlayer;
 
+let tileMap;
+
 // create an object to hold our "world parameters" - we will send this object into our
 // OverheadWorld to tell it how our world is organized
 let worldParameters = {
-    tileSize: 50,
+    tileSize: 16,
     tileFolder: 'farming',
-    numTiles: 49,
-    solidTiles: {0:true, 18:true, 6:true}
-  };
+    numTiles: 0,
+    solidTiles: { 0: true, 18: true, 6: true }
+};
 
-  // handle the tile loading and creating our player object in preload before the game can start
+// handle the tile loading and creating our player object in preload before the game can start
 function preload() {
-    // theWorld = new OverheadWorld(worldParameters);
-    // thePlayer = new Player(100, 100, theWorld);
+    worldParameters.numTiles = tileMap.width / worldParameters.tileSize;
+
+    // create our world
+    theWorld = new OverheadWorld(worldParameters);
+
+    // create our player
+    thePlayer = new Player(100, 100, theWorld);
 }
 
 function setup() {
-createCanvas(600,600);
-// 
+    createCanvas(960, 480);
 }
 
 function draw() {
-
+    background(0);
+    ellipse(width / 2, height / 2, 48, 48);
 }
