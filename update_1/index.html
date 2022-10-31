@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Midterm Project</title>
+</head>
+<style>
+    body {
+        background-color: green;
+        font-family:'Courier New', Courier, monospace;
+        margin-left: 50px;
+    }
+    .farming-graphics, .text, .to-do,  #heading1 {
+        display: inline-block;
+        margin-left: 20px;
+    }
+    .text {
+        margin-right: 30px;
+    }
+    .farming-graphic-block {
+        display: flex;
+        margin-bottom: 5px;
+    }
+    .content, .heading {
+        border: 3px;
+        border-style: solid;
+        border-color: darkgray;
+        inline-size: 820px;
+        background-color: gray;
+    }
+</style>
+<body>
+    <div class="heading" style="border-color: rgba(58, 94, 0, 0.527); background-color:darkgreen; height: 80px;">
+        <h1 id="heading1">Project Update #1</h1>
+    </div>
+    <div class="content">
+        <div class="farming-graphics">
+            <h2>Here are the graphics we plan to use:</h2>
+            <div class="farming-graphic-block">
+                <div class="text" style="inline-size: 500px;">
+                    <p>These could be the graphic for the trees.</p>
+                    <p>The player will press the `harvest` button near the trees, and fruits will fall off in the game and then disappear.
+                        But the number of fruits that fell to the ground will then show up in your inventory </p>
+                </div>
+                <img src="./img/graphic1.gif" style="width:200px; height:150px;" alt="graphic 1">
+            </div>
+            <div class="farming-graphic-block">
+                <img src="./img/graphic2.gif" style="width:400px; height:150px;" alt="graphic 2">
+                <div class="text" style="inline-size: 350px;">
+                    <p>This could be a base for our inventory graphic.</p>
+                    <p>The materials the player collects will show up in the inventory, and you can choose the items in inventory to cook
+                        with.
+                    </p>
+                </div>
+            </div>
+            <div class="farming-graphic-block">
+                <div class="text" style="inline-size: 300px;">
+                    <p>These could be our farm animal graphics.</p>
+                    <p>The player would go up to the farm animal and interact with them to get materials/ ingredients, similarly
+                        to harvesting the trees.
+                    </p>
+                </div>
+                <img src="./img/graphic3.gif" style="width:200px; height:150px;" alt="graphic 3">
+                <img src="./img/graphic4.gif" style="width:200px; height:150px;" alt="graphic 4">
+            </div>
+            <p>Asset credits go to <a href="https://shubibubi.itch.io/">Shubichubi</a></p>
+            <div class="farming-graphic-block">
+                <img src="./img/graphic5.png" style="width:400px;; height:100px;" alt="graphic 5">
+                <div class="text" style="inline-size: 350px;">
+                    <p>We were also thinking of using these chef character assets, but we might opt to create our own graphic of a 
+                        chef hat, and then plop that onto the character assets from Shubichubi.
+                    </p>
+                </div>
+            </div>
+            <p>Asset credit for chef character goes to <a href="https://opengameart.org/content/chef-animated-classic-hero-edit ">this source</a></p>
+        </div>
+        <div class="to-do" style="margin-bottom: 100px;">
+            <h2>Here are things we want to complete soon:</h2>
+            <ul style="inline-size: 600px;">
+                <li>Create tile array map for the Farm map and Kitchen map.</li>
+                <li>Make it so that the Farm map background moves with the character, but the Kitchen map background
+                    stays fixed and the character moves around instead.
+                </li>
+                <li>Create some new graphics by editting existing Shubichubi graphics, for example:
+                    <ul>
+                        <li>Edit stove top to light up red and have a frying pan move left and right to emulate cooking.</li>
+                        <li>Add on a chef hat graphic that can be overlayed on top of character graphics when entering the kitchen.</li>
+                    </ul>
+                </li>
+                <li>Sort out how we want the Store graphic to look like (is it an overlay? is it an entirely new map? will there be a 
+                    shop keeper there? etc.).
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
