@@ -6,6 +6,8 @@ let theWorld;
 let thePlayer;
 
 let tileMap;
+// room data - loaded in from an external file (see 'data/rooms.json')
+let roomData;
 
 // create an object to hold our "world parameters" - we will send this object into our
 // OverheadWorld to tell it how our world is organized
@@ -35,3 +37,22 @@ function draw() {
     background(0);
     ellipse(width / 2, height / 2, 48, 48);
 }
+
+function setup() {
+    createCanvas(960, 480);
+    // 
+
+} function allDone(worldData) {
+    console.log("here");
+}
+
+function badStuffHappened(result) {
+    console.log(result);
+}
+
+function draw() {
+    theWorld.displayWorld()
+    thePlayer.move();
+    thePlayer.display();
+}
+
