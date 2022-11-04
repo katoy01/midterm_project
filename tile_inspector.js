@@ -7,10 +7,10 @@ let cursorY = 0;
 let htmlElement;
 
 function preload() {
-  tilesetArtwork = loadImage('/assets/tiles.png');
+  tilesetArtwork = loadImage('/assets/global.png');
 }
 function setup() {
-  createCanvas(864, 800);
+  createCanvas(2000, 1000);
   stroke(0, 255, 0);
   strokeWeight(3);
   noFill();
