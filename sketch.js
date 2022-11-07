@@ -2,7 +2,7 @@
 let tilesetArtwork, playerArtwork;
 
 // the size of each tile (32 x 32 square)
-let worldTileSize = 32;
+let worldTileSize = 16;
 
 // ofsets for screen scrolling
 let offsetX = 0;
@@ -105,7 +105,7 @@ let player;
 
 // handle the tile loading and creating our player object in preload before the game can start
 function preload() {
-    tilesetArtwork = loadImage('./assets/global.png');
+    tilesetArtwork = loadImage('./assets/tiles.png');
     playerArtwork = loadImage('./assets/player.png');
 
     worldParameters.tilesetArtwork = tilesetArtwork;
@@ -131,7 +131,7 @@ function setup() {
     createCanvas(960, 480);
     background(128);
 
-    tilesetArtwork.resize(4736, 2272);
+    tilesetArtwork.resize(1728, 1600);
     playerArtwork.resize(128, 256);
 
     // setup the world overlay
@@ -230,7 +230,9 @@ function setOverlayAtPosition(id, screenX, screenY) {
 
 function isSolid(id) {
     // return true for all solid tiles
-    if (id == 460) {
+    if (id == 2370 || id == 3998 ||  id == 3999 ||  id == 3850 ||  id == 3851 ||  id == 4297 ||  id == 4296 ||  
+        id == 4446 ||  id == 4440 ||  id == 4441 ||  id == 4299 || id == 4005 ||  id == 4006 || id == 4591 || id == 2725 
+        ||  id == 2873 ||  id == 6958 ||  id == 7106 ||  id == 7254 ||  id == 4155 ||  id == 3857 ||  id == 3856 ||  id == 2376 ||  id == 459  ) {
         return true;
     }
     return false;
@@ -346,7 +348,7 @@ class Player {
 
             drawTile(playerArtwork, (this.direction * 4) + this.currentFrame, 32, 64, this.x, this.y);
         } else {
-            drawTile(playerArtwork, (this.direction * 4), 32, 64, this.x, this.y);
+            drawTile(playerArtwork, (this.direction * 4) + 1, 32, 64, this.x, this.y);
         }
     }
 }
