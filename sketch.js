@@ -7,6 +7,7 @@ let worldTileSize = 32;
 // ofsets for screen scrolling
 let offsetX = 0;
 let offsetY = 0;
+let minOffsetX, minOffsetY;
 
 let world = [
     //                          10                            20                            30                            40                            50                            60                            70                            80
@@ -107,14 +108,6 @@ let player;
 function preload() {
     tilesetArtwork = loadImage('./assets/global.png');
     playerArtwork = loadImage('./assets/player.png');
-
-    worldParameters.tilesetArtwork = tilesetArtwork;
-
-    // // create our world
-    // theWorld = new OverheadWorld(worldParameters);
-
-    // // create our player
-    // thePlayer = new Player(100, 100, theWorld);
 }
 
 
@@ -129,7 +122,7 @@ function preload() {
 // create canvas & player object
 function setup() {
     createCanvas(960, 480);
-    background(128);
+    background(255);
 
     tilesetArtwork.resize(4736, 2272);
     playerArtwork.resize(128, 256);
@@ -137,13 +130,16 @@ function setup() {
     // setup the world overlay
     setupOverlay();
 
+    minOffsetX = (width) - (world[0].length * worldTileSize);
+    minOffsetY = (height) - (world.length * worldTileSize);
+
     // create our player
-    player = new Player(width / 2 - 16, height / 2 - 16);
+    player = new Player(width / 2, height / 2);
 }
 
 function draw() {
     // draw the world and the character
-    background(0);
+    background(113, 143, 63);
     push();
     translate(offsetX, offsetY);
     drawWorld();
@@ -230,10 +226,14 @@ function setOverlayAtPosition(id, screenX, screenY) {
 
 function isSolid(id) {
     // return true for all solid tiles
-    if (id == 460) {
+    if (id === 13) {
         return true;
     }
     return false;
+}
+
+function isInteractable(id) {
+
 }
 
 class Player {
@@ -252,6 +252,8 @@ class Player {
         this.currentFrame = 0;
         this.pauseCounter = 0;
         this.pauseCounterMax = 20;
+
+        this.facingTile = [];
     }
 
     computeSensors() {
@@ -278,16 +280,22 @@ class Player {
     }
 
     moveAndDisplay() {
+        this.facing = [];
         this.computeSensors();
         this.walking = false;
 
         if (keyIsDown(68)) {
             ellipse(this.right, this.middleY, 5, 5);
             let id = getWorldTileAtPosition(this.right, this.middleY);
-            console.log(id);
+            this.facing.push(id);
+            // console.log(id);
             if (!isSolid(id)) {
-                //this.x -= this.speed;
-                offsetX -= this.speed;
+                if (offsetX > minOffsetX) {
+                    // console.log(offsetX, (width) - (world[0].length * worldTileSize));
+                    offsetX -= this.speed;
+                } else {
+                    this.x += this.speed;
+                }
             }
             if (!keyIsDown(87) && !keyIsDown(83)) {
                 this.direction = 1;
@@ -297,10 +305,14 @@ class Player {
         if (keyIsDown(65)) {
             ellipse(this.left, this.middleY, 5, 5);
             let id = getWorldTileAtPosition(this.left, this.middleY);
-            console.log(id);
+            this.facing.push(id);
+            // console.log(id);
             if (!isSolid(id)) {
-                //this.x += this.speed;
-                offsetX += this.speed;
+                if (offsetX < 0) {
+                    offsetX += this.speed;
+                } else {
+                    this.x -= this.speed;
+                }
             }
             if (!keyIsDown(87) && !keyIsDown(83)) {
                 this.direction = 2;
@@ -310,9 +322,13 @@ class Player {
         if (keyIsDown(87)) {
             ellipse(this.middleX, this.up, 5, 5);
             let id = getWorldTileAtPosition(this.middleX, this.up);
+            this.facing.push(id);
             if (!isSolid(id)) {
-                //this.y -= this.speed;
-                offsetY += this.speed;
+                if (offsetY < 0) {
+                    offsetY += this.speed;
+                } else {
+                    this.y -= this.speed;
+                }
             }
             if (!keyIsDown(68) && !keyIsDown(65)) {
                 this.direction = 3;
@@ -322,14 +338,23 @@ class Player {
         if (keyIsDown(83)) {
             ellipse(this.middleX, this.down, 5, 5);
             let id = getWorldTileAtPosition(this.middleX, this.down);
+            this.facing.push(id);
             if (!isSolid(id)) {
-                //this.y += this.speed;
-                offsetY -= this.speed;
+                if (offsetY > minOffsetY) {
+                    offsetY -= this.speed;
+                } else {
+                    this.y += this.speed;
+                }
             }
             if (!keyIsDown(68) && !keyIsDown(65)) {
                 this.direction = 0;
             }
             this.walking = true;
+        }
+        if (keyIsDown(13)) {
+            this.facing.forEach(tileId => {
+
+            })
         }
 
         if (this.walking) {
