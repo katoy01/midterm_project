@@ -106,7 +106,7 @@ let player;
 
 // handle the tile loading and creating our player object in preload before the game can start
 function preload() {
-    tilesetArtwork = loadImage('./assets/global.png');
+    tilesetArtwork = loadImage('./assets/tiles.png');
     playerArtwork = loadImage('./assets/player.png');
 }
 
@@ -124,7 +124,7 @@ function setup() {
     createCanvas(960, 480);
     background(255);
 
-    tilesetArtwork.resize(4736, 2272);
+    tilesetArtwork.resize(1728, 1600);
     playerArtwork.resize(128, 256);
 
     // setup the world overlay
@@ -371,7 +371,7 @@ class Player {
 
             drawTile(playerArtwork, (this.direction * 4) + this.currentFrame, 32, 64, this.x, this.y);
         } else {
-            drawTile(playerArtwork, (this.direction * 4), 32, 64, this.x, this.y);
+            drawTile(playerArtwork, (this.direction * 4) + 1, 32, 64, this.x, this.y);
         }
     }
 }
