@@ -3,28 +3,32 @@ class OverheadWorld {
         // store our desired tile size
         this.tileSize = params.tileSize;
 
-        // store the folder in which all of our tiles are stored
-        this.tileFolder = params.tileFolder;
+        // // store the folder in which all of our tiles are stored
+        // this.tileFolder = params.tileFolder;
 
-        // store how many tiles we are working with
-        this.numTiles = params.numTiles;
+        // // store how many tiles we are working with
+        // this.numTiles = tileMap.width / worldParameters.tileSize;;
 
         // store an object that defines which tiles are solid
         this.solidTiles = params.solidTiles;
 
-        // an array to hold all tile graphics
-        this.tileLibrary = [];
+        // // an array to hold all tile graphics
+        // this.tileLibrary = [];
 
-        // load in all tile graphics
-        for (var i = 0; i < this.numTiles; i++) {
-            var tempTile = loadImage(this.tileFolder + "/" + i + ".png");
-            this.tileLibrary.push(tempTile);
-        }
+        // // load in all tile graphics
+        // for (var i = 0; i < this.numTiles; i++) {
+        //     var tempTile = loadImage(this.tileFolder + "/" + i + ".png");
+        //     this.tileLibrary.push(tempTile);
+        // }
+
+        this.tileMapImg = params.tileMapImg;
+        this.tmiWidth = this.tileMapImg.width / this.tileSize;
+        this.tileMap = params.tileMap;
     }
 
     // displayTile: draws a single tile at a specified location
     displayTile(id, x, y) {
-        image(this.tileLibrary[id], x, y);
+        image(this.tileMapImg, x, y, this.tileSize, this.tileSize, this.tileSize * (id / this.tmiWidth), this.tilesize * (id % this.tmiWidth));
     }
 
     // setup rooms
@@ -43,7 +47,8 @@ class OverheadWorld {
     displayWorld() {
         for (var row = 0; row < this.tileMap.length; row += 1) {
             for (var col = 0; col < this.tileMap[row].length; col += 1) {
-                image(this.tileLibrary[this.tileMap[row][col]], col * this.tileSize, row * this.tileSize, this.tileSize, this.tileSize);
+                this.displayTile(this.tileMap[row][col], col * this.tileSize, row * this.tileSize);
+                // image(this.tileLibrary[this.tileMap[row][col]], col * this.tileSize, row * this.tileSize, this.tileSize, this.tileSize);
             }
         }
     }
