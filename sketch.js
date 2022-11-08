@@ -3,7 +3,7 @@ let tilesetArtwork, playerArtwork;
 
 // the size of each tile (32 x 32 square)
 let worldTileSize = 32;
-let playerTileSizeX = 32, playerTileSizeY = 64;
+let playerTileSizeX = 32, playerTileSizeY = 32;
 
 // ofsets for screen scrolling
 let offsetX = 0;
@@ -104,6 +104,16 @@ let world = [
 let overlay = [];
 
 let player;
+let plantArr = [];
+
+let plantInfoAll = {
+    'wheat': {
+        bagId: 6379,
+        sproutArr: [6380, 6381, 6382, 6383, 6384],
+        harvestableId: 6385,
+        inventoryId: 5969
+    }
+}
 
 // handle the tile loading and creating our player object in preload before the game can start
 function preload() {
@@ -126,7 +136,7 @@ function setup() {
     background(255);
 
     tilesetArtwork.resize(4736, 2272);
-    playerArtwork.resize(128, 256);
+    playerArtwork.resize(128, 128);
 
     // setup the world overlay
     setupOverlay();
@@ -148,6 +158,9 @@ function draw() {
 
     // the character will always be drawn in the middle of the screen
     player.moveAndDisplay();
+    plantArr.forEach(plant => {
+        plant.display();
+    })
 }
 
 // draw the entire world using the 2D array above
@@ -216,7 +229,9 @@ function getOverlayTileAtPosition(screenX, screenY) {
 }
 
 function keyPressed() {
-    player.changeEnvironment();
+    if (keyCode === 13) {
+        player.changeEnvironment();
+    }
 }
 
 
@@ -225,6 +240,13 @@ function setOverlayAtPosition(id, screenX, screenY) {
     let arrayX = int((screenX - offsetX) / worldTileSize);
     let arrayY = int((screenY - offsetY) / worldTileSize);
 
+    if (world[arrayY][arrayX] != undefined) {
+        overlay[arrayY][arrayX] = id;
+    }
+}
+
+function setOverlayAtPositionArr(id, arrayX, arrayY) {
+    // convert screen coordinates into array coordinates
     if (world[arrayY][arrayX] != undefined) {
         overlay[arrayY][arrayX] = id;
     }
@@ -245,6 +267,11 @@ function interactOverlay(x, y) {
         setOverlayAtPosition(4300, x, y);
     } else if (getOverlayTileAtPosition(x, y) === 4300) {
         setOverlayAtPosition(4299, x, y);
+    }
+    console.log(getWorldTileAtPosition(x, y));
+    if (getWorldTileAtPosition(x, y) === 1353) {
+        let plant = new Plant(x, y, 'wheat');
+        plantArr.push(plant);
     }
 }
 
@@ -278,32 +305,14 @@ class Player {
     }
 
     changeEnvironment() {
-        // manipulate the environment with the space key
-        if (keyIsDown(32)) {
-            // if there's nothing here we should add something
-            if (getOverlayTileAtPosition(this.middleX, this.middleY) == -1) {
-                // adjust what's in the array here
-                setOverlayAtPosition(int(random(1, 5)), this.middleX, this.middleY);
-            }
-            else {
-                setOverlayAtPosition(-1, this.middleX, this.middleY);
-            }
-        }
-        if (keyIsDown(13)) {
-            switch (this.direction) {
-                case 0: {
-                    interactOverlay(this.middleX, this.down);
-                };
-                case 1: {
-                    interactOverlay(this.right, this.middleY);
-                };
-                case 2: {
-                    interactOverlay(this.left, this.middleY);
-                };
-                default: {
-                    interactOverlay(this.middleX, this.up);
-                };
-            }
+        if (this.direction === 0) {
+            interactOverlay(this.middleX, this.down);
+        } else if (this.direction === 1) {
+            interactOverlay(this.right, this.middleY);
+        } else if (this.direction === 2) {
+            interactOverlay(this.right, this.middleY);
+        } else {
+            interactOverlay(this.right, this.middleY);
         }
     }
 
@@ -316,10 +325,8 @@ class Player {
             ellipse(this.right, this.middleY, 5, 5);
             let id = getWorldTileAtPosition(this.right, this.middleY);
             let id2 = getOverlayTileAtPosition(this.right, this.middleY);
-            // console.log(id);
             if (!isSolid(id) && !isSolid(id2)) {
                 if (offsetX > minOffsetX && this.x === (width / 2)) {
-                    // console.log(offsetX, (width) - (world[0].length * worldTileSize));
                     offsetX -= this.speed;
                 } else {
                     this.x += this.speed;
@@ -334,7 +341,6 @@ class Player {
             ellipse(this.left, this.middleY, 5, 5);
             let id = getWorldTileAtPosition(this.left, this.middleY);
             let id2 = getOverlayTileAtPosition(this.left, this.middleY);
-            // console.log(id);
             if (!isSolid(id) && !isSolid(id2)) {
                 if (offsetX < 0 && this.x === (width / 2)) {
                     offsetX += this.speed;
@@ -392,9 +398,41 @@ class Player {
                 this.pauseCounter = this.pauseCounterMax;
             }
 
-            drawTile(playerArtwork, (this.direction * 4) + this.currentFrame, 32, 64, this.x, this.y);
+            drawTile(playerArtwork, (this.direction * 4) + this.currentFrame, playerTileSizeX, playerTileSizeY, this.x, this.y);
         } else {
-            drawTile(playerArtwork, (this.direction * 4), 32, 64, this.x, this.y);
+            drawTile(playerArtwork, (this.direction * 4), playerTileSizeX, playerTileSizeY, this.x, this.y);
+        }
+    }
+}
+
+class Plant {
+    constructor(screenX, screenY, plantName) {
+        this.arrayX = int((screenX - offsetX) / worldTileSize);
+        this.arrayY = int((screenY - offsetY) / worldTileSize);
+        this.plantInfo = plantInfoAll[plantName];
+        this.sproutPos = 0;
+        console.log(this.plantInfo.sproutArr[this.sproutPos], this.arrayX, this.arrayY);
+        setOverlayAtPositionArr(this.plantInfo.sproutArr[this.sproutPos], this.arrayX, this.arrayY);
+        this.maxFrames = 120;
+        this.currentFrames = 0;
+        // 0 = growing
+        // 1 = harvestable
+        this.state = 0;
+    }
+
+    display() {
+        if (this.state === 0) {
+            if (this.currentFrames >= this.maxFrames) {
+                this.sproutPos++;
+                if (this.sproutPos < this.plantInfo.sproutArr.length) {
+                    setOverlayAtPositionArr(this.plantInfo.sproutArr[this.sproutPos], this.arrayX, this.arrayY);
+                    this.currentFrames = 0;
+                } else {
+                    setOverlayAtPositionArr(this.plantInfo.harvestableId, this.arrayX, this.arrayY);
+                    this.state = 1;
+                }
+            }
+            this.currentFrames++;
         }
     }
 }
