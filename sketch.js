@@ -228,7 +228,7 @@ function isSolid(id) {
     // return true for all solid tiles
     if (id === 13 || id == 2370 || id == 3998 || id == 3999 || id == 3850 || id == 3851 || id == 4297 || id == 4296 ||
         id == 4446 || id == 4440 || id == 4441 || id == 4299 || id == 4005 || id == 4006 || id == 4591 || id == 2725
-        || id == 2873 || id == 6958 || id == 7106 || id == 7254 || id == 4155 || id == 3857 || id == 3856 || id == 2376 || id == 459) {
+        || id == 2873 || id == 6958 || id == 7106 || id == 7254 || id == 4155 || id == 3857 || id == 3856 || id == 2376 || id == 459 || id == 4593) {
         return true;
     }
     return false;
