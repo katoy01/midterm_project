@@ -257,17 +257,17 @@ function isSolid(id) {
     if (id === 13 || id == 2370 || id == 3998 || id == 3999 || id == 3850 || id == 3851 || id == 4297 || id == 4296 ||
         id == 4446 || id == 4440 || id == 4441 || id == 4299 || id == 4005 || id == 4006 || id == 4591 || id == 2725
         || id == 2873 || id == 6958 || id == 7106 || id == 7254 || id == 4155 || id == 3857 || id == 3856 || id == 2376 || id == 459 || id == 4593
-        || id == 1697 || id== 1687 || id== 1688 || id== 1689 || id== 1690 || id== 1691 || id==3517 || id==  3518 || id==  3519 || id== 3520 
-        || id== 3014 || id== 3162 || id==3310 || id== 3458 || id==3606 || id==3607 || id== 3608 || id==3609 || id== 3610 || id== 3611 || id== 3612
-        || id== 3020 || id== 3168 || id== 3316 || id==3464 || id== 3612 || id== 1786 || id== 1788|| id== 1934 
-        || id== 1934 || id== 1933 || id== 1788 || id==1784 || id== 1931 || id== 1935 || id==1936|| id== 2368 || id== 2220 || id== 2221
-        || id== 2368 || id ==2812 || id == 2517 || id == 2961 || id == 1095 || id == 1243 || id == 1391 || id == 1539 || id == 3072
-        || id ==  3077 || id == 3225 || id ==  2584 || id == 2585 || id == 2586 || id == 1545 || id == 1546 || id == 3372 || id == 3324 
-         || id == 3224 || id == 3369 || id == 3221 || id == 3721  || id == 1096 || id == 1097 || id == 1098 || id == 1099 
-         || id == 1247 || id == 2360 || id == 2631 || id == 2778 || id == 2779 || id == 2926 || id == 2927 || id == 3074 
-         || id == 3075 || id == 3073 || id == 3072 || id == 3071 ||  id == 3076 || id == 3078 || id == 2882 || id == 3854
-         || id == 3856 || id == 3720 || id == 3722 || id == 4588 || id == 4589 || id == 4595 || id == 4596
-         || id == 4303 || id == 4304 || id == 4305 || id == 2664 || id == 2220 || id == 4444 || id ==  4451 ) {
+        || id == 1697 || id == 1687 || id == 1688 || id == 1689 || id == 1690 || id == 1691 || id == 3517 || id == 3518 || id == 3519 || id == 3520
+        || id == 3014 || id == 3162 || id == 3310 || id == 3458 || id == 3606 || id == 3607 || id == 3608 || id == 3609 || id == 3610 || id == 3611 || id == 3612
+        || id == 3020 || id == 3168 || id == 3316 || id == 3464 || id == 3612 || id == 1786 || id == 1788 || id == 1934
+        || id == 1934 || id == 1933 || id == 1788 || id == 1784 || id == 1931 || id == 1935 || id == 1936 || id == 2368 || id == 2220 || id == 2221
+        || id == 2368 || id == 2812 || id == 2517 || id == 2961 || id == 1095 || id == 1243 || id == 1391 || id == 1539 || id == 3072
+        || id == 3077 || id == 3225 || id == 2584 || id == 2585 || id == 2586 || id == 1545 || id == 1546 || id == 3372 || id == 3324
+        || id == 3224 || id == 3369 || id == 3221 || id == 3721 || id == 1096 || id == 1097 || id == 1098 || id == 1099
+        || id == 1247 || id == 2360 || id == 2631 || id == 2778 || id == 2779 || id == 2926 || id == 2927 || id == 3074
+        || id == 3075 || id == 3073 || id == 3072 || id == 3071 || id == 3076 || id == 3078 || id == 2882 || id == 3854
+        || id == 3856 || id == 3720 || id == 3722 || id == 4588 || id == 4589 || id == 4595 || id == 4596
+        || id == 4303 || id == 4304 || id == 4305 || id == 2664 || id == 2220 || id == 4444 || id == 4451) {
         return true;
     }
     return false;
@@ -279,7 +279,7 @@ function interactOverlay(x, y) {
     } else if (getOverlayTileAtPosition(x, y) === 4300) {
         setOverlayAtPosition(4299, x, y);
     }
-    console.log(getWorldTileAtPosition(x, y));
+    console.log(getOverlayTileAtPosition(x, y));
     if (getWorldTileAtPosition(x, y) === 1353) {
         let plant = new Plant(x, y, 'wheat');
         plantArr.push(plant);
@@ -321,9 +321,9 @@ class Player {
         } else if (this.direction === 1) {
             interactOverlay(this.right, this.middleY);
         } else if (this.direction === 2) {
-            interactOverlay(this.right, this.middleY);
+            interactOverlay(this.left, this.middleY);
         } else {
-            interactOverlay(this.right, this.middleY);
+            interactOverlay(this.middleX, this.up);
         }
     }
 
@@ -422,7 +422,6 @@ class Plant {
         this.arrayY = int((screenY - offsetY) / worldTileSize);
         this.plantInfo = plantInfoAll[plantName];
         this.sproutPos = 0;
-        console.log(this.plantInfo.sproutArr[this.sproutPos], this.arrayX, this.arrayY);
         setOverlayAtPositionArr(this.plantInfo.sproutArr[this.sproutPos], this.arrayX, this.arrayY);
         this.maxFrames = 120;
         this.currentFrames = 0;
