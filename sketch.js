@@ -1,14 +1,18 @@
 // graphic to hold all of our tiles as one big image
 let tilesetArtwork, playerArtwork;
+let chicken_babyArt, chickenArt, cow_baby_brownArt, cow_brownArt;
 
 // the size of each tile (32 x 32 square)
 let worldTileSize = 32;
 let playerTileSizeX = 32, playerTileSizeY = 32;
+let chickenTileSize = 32, cowBabyTileSize = 42;
 
 // ofsets for screen scrolling
 let offsetX = 0;
 let offsetY = -200;
 let minOffsetX, minOffsetY;
+
+let cow;
 
 let world = [
     //                          10                            20                            30                            40                            50                            60                            70                            80
@@ -100,6 +104,16 @@ let world = [
     //^40th row
 ]
 
+// handle the tile loading and creating our player object in preload before the game can start
+function preload() {
+    tilesetArtwork = loadImage('./assets/global.png');
+    playerArtwork = loadImage('./assets/player.png');
+    chicken_babyArt = loadImage('./assets/chicken_baby.png');
+    chickenArt = loadImage('./assets/chicken.png');
+    cow_baby_brownArt = loadImage('./assets/cow_baby_brown.png');
+    cow_brownArt = loadImage('./assets/cow_brown.png');
+}
+
 // overlays for our world
 let overlay = [];
 
@@ -115,10 +129,11 @@ let plantInfoAll = {
     }
 }
 
-// handle the tile loading and creating our player object in preload before the game can start
-function preload() {
-    tilesetArtwork = loadImage('./assets/global.png');
-    playerArtwork = loadImage('./assets/player.png');
+let animalInfoAll = {
+    'cow': {
+        img: cow_brownArt,
+        tileSize: 48
+    }
 }
 
 
@@ -137,6 +152,12 @@ function setup() {
 
     tilesetArtwork.resize(4736, 2272);
     playerArtwork.resize(128, 128);
+    chicken_babyArt.resize(128, 160);
+    chickenArt.resize(128, 160);
+    cow_baby_brownArt.resize(168, 210);
+    cow_brownArt.resize(192, 240);
+
+    animalInfoAll['cow'].img = cow_brownArt;
 
     // setup the world overlay
     setupOverlay();
@@ -146,6 +167,8 @@ function setup() {
 
     // create our player
     player = new Player(width / 2, height / 2);
+
+    cow = new Animal(52, 15, 'cow');
 }
 
 function draw() {
@@ -161,6 +184,7 @@ function draw() {
     plantArr.forEach(plant => {
         plant.display();
     })
+    cow.display();
 }
 
 // draw the entire world using the 2D array above
@@ -276,15 +300,17 @@ function isSolid(id) {
 }
 
 function interactOverlay(x, y) {
+    // console.log(int((x - offsetX) / worldTileSize), int((y - offsetY) / worldTileSize));
     if (getOverlayTileAtPosition(x, y) === 4299) {
         setOverlayAtPosition(4300, x, y);
     } else if (getOverlayTileAtPosition(x, y) === 4300) {
         setOverlayAtPosition(4299, x, y);
     }
-    console.log(getOverlayTileAtPosition(x, y));
     if (getWorldTileAtPosition(x, y) === 1353) {
-        let plant = new Plant(x, y, 'wheat');
-        plantArr.push(plant);
+        if (getOverlayTileAtPosition(x, y) === -1) {
+            let plant = new Plant(x, y, 'wheat');
+            plantArr.push(plant);
+        }
     }
 }
 
@@ -446,5 +472,30 @@ class Plant {
             }
             this.currentFrames++;
         }
+    }
+}
+
+class Animal {
+    constructor(arrayX, arrayY, animalName) {
+        this.x = arrayX * worldTileSize;
+        this.y = arrayY * worldTileSize;
+        this.animalInfo = animalInfoAll[animalName];
+        this.spritePos = 0;
+        this.maxFrames = 120;
+        this.currentFrames = 0;
+        // 0 = growing
+        // 1 = harvestable
+        this.state = 0;
+        // 0 = down
+        // 1 = up
+        // 2 = left
+        // 3 = right
+        // 4 = sleeping
+        this.direction = 0;
+    }
+
+    display() {
+        drawTile(this.animalInfo.img, this.spritePos, this.animalInfo.tileSize, this.animalInfo.tileSize,
+            this.x + offsetX, this.y + offsetY);
     }
 }
