@@ -866,11 +866,22 @@ class Animal {
                 }
             }
         }
+        if (this.animalName === "cow"){
+            milk.amount = milk.amount+1;
+            console.log(milk.amount);
+        }
+        if (this.animalName === "chicken"){
+            eggs.amount = eggs.amount+1;
+            console.log(eggs.amount);
+        }
         this.spritePos = 0;
         this.currentFrames = 0;
         this.walkingTimer = 0;
         this.restingTimer = 0;
         this.walking = false;
+        
+
+        
     }
 
     moveAndDisplay() {
