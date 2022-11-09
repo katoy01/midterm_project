@@ -164,14 +164,15 @@ function preload() {
     inventoryTiles[6] = loadImage('./assets/milk.png');
     inventoryTiles[7] = loadImage('./assets/egg.png');
 
-   gate = loadSound("./assets/gate.wav");
-   moo = loadSound("./assets/moo.wav");
-   harvest = loadSound("./assets/harvest_crop.ogg");
-   walk = loadSound("./assets/walk.wav");
-   plop = loadSound("./assets/seed_plant.ogg");
-   cluck = loadSound("./assets/chicken.wav");
-   clickSound = loadSound("./assets/click.wav");
+    gate = loadSound("./assets/gate.wav");
+    moo = loadSound("./assets/moo.wav");
+    harvest = loadSound("./assets/harvest_crop.ogg");
+    walk = loadSound("./assets/walk.wav");
+    plop = loadSound("./assets/seed_plant.ogg");
+    cluck = loadSound("./assets/chicken.wav");
+    clickSound = loadSound("./assets/click.wav");
 
+}
 
 // overlays for our world
 let overlay = [];
@@ -689,11 +690,11 @@ class Player {
         this.facing = [];
         this.computeSensors();
         this.walking = false;
-        if (this.walking == true){
+        if (this.walking == true) {
             walk.play();
             walk.loop();
         }
-        else{
+        else {
             walk.stop();
         }
 
@@ -712,8 +713,8 @@ class Player {
                 this.direction = 1;
             }
             this.walking = true;
-            
-            
+
+
         }
         if (keyIsDown(65)) {
             // ellipse(this.left, this.middleY, 5, 5);
@@ -919,13 +920,13 @@ class Animal {
                 }
             }
         }
-        if (this.animalName === "cow"){
-            milk.amount = milk.amount+1;
+        if (this.animalName === "cow") {
+            milk.amount = milk.amount + 1;
             console.log(milk.amount);
             moo.play();
         }
-        if (this.animalName === "chicken"){
-            eggs.amount = eggs.amount+1;
+        if (this.animalName === "chicken") {
+            eggs.amount = eggs.amount + 1;
             console.log(eggs.amount);
             cluck.play();
         }
@@ -934,9 +935,9 @@ class Animal {
         this.walkingTimer = 0;
         this.restingTimer = 0;
         this.walking = false;
-        
 
-        
+
+
     }
 
     moveAndDisplay() {
