@@ -29,15 +29,8 @@ let cornArt, cornEmpty;
 let tomatoArt, tomatoEmpty;
 let wheatArt, wheatEmpty;
 
-var rows;
-var cols;
-var imageW = 60;
-var imageH = 60;
-
-
-
-// let startdiv = select("start");
-// let gamecnv = select("gameCanvas");
+let numInventorySelected; 
+let selectedStatus = false;
 
 
 // the size of each tile (32 x 32 square)
@@ -248,8 +241,8 @@ function setup() {
     cnv.parent('gameCanvas');
     // cellWidth = width/columns;
     // cellHeight = height / 4;
-    inventoryBuffer = createGraphics(500, 500);
-    //inventory.image()
+   
+   
     // inventory = createGraphics(cnv.parent.width, cnv.parent.height)
     rows = 1;
 	cols = 8;
@@ -330,19 +323,61 @@ function draw(){
 }
 if (stage === 2 ){
     background(255);
-    image(inventoryCanvas,0,0,960,480);
+    inventoryBuffer = createGraphics(660, 330);
+    inventoryBuffer.image(inventoryCanvas,0,0);
+    image(inventoryBuffer,0,0);
+    //image(inventoryCanvas,0,0,960,480);
     textAlign(CENTER);
-    fill(247,142,132,255);
-    textSize(50);
+    fill(0);
+    textSize(15);
     text("Please enter what number you want to use", width-width/5, height/4);
+    if (selectedStatus == true){
+        if(numInventorySelected == 1){
+            text("You selected tomato seeds. You have "+ tomatoSeeds.amount+" left",width-width/5, height/4+25);
+            text("Click To Continue",width-width/5+20, height/4+50);
+        }
+        if(numInventorySelected == 2){
+            text("You selected wheat seeds. You have "+ wheatSeeds.amount+" left",width-width/5, height/4+25);
+            text("Click To Continue",width-width/5+20, height/4+50);
+        }
+        if(numInventorySelected == 3){
+            text("You selected corn seeds. You have "+ cornSeeds.amount+" left",width-width/5, height/4+25);
+            text("Click To Continue",width-width/5+20, height/4+50);
+        }
+        if(numInventorySelected == 4){
+            text("You selected tomatos. You have "+ tomato.amount+" left",width-width/5, height/4+25);
+            text("Click To Continue",width-width/5+20, height/4+50);
+        }
+        if(numInventorySelected == 5){
+            text("You selected wheat. You have "+ wheat.amount+" left",width-width/5, height/4+25);
+            text("Click To Continue",width-width/5+20, height/4+50);
+        }
+        if(numInventorySelected == 6){
+            text("You selected corn. You have "+ corn.amount+" left",width-width/5, height/4+25);
+            text("Click To Continue",width-width/5+20, height/4+50);
+        }
+    
+        if(numInventorySelected == 7){
+            text("You selected milk. You have "+ milk.amount+" left",width-width/5, height/4+25);
+            text("Click To Continue",width-width/5+20, height/4+50);
+        }
+        if(numInventorySelected == 8){
+            text("You selected eggs. You have "+ eggs.amount+" left",width-width/5, height/4+25);
+            text("Click To Continue",width-width/5+20, height/4+50);
+        }
+   
+    }
+
+
     
    
 }
 
 if (mouseIsPressed == true){
     stage = 1;
+    mouseIsPressed = false;
 }
-if (keyPressed == )
+
 }
 
 // draw the entire world using the 2D array above
@@ -415,28 +450,36 @@ function keyPressed() {
         player.changeEnvironment();
     }
     if (keyCode === 49){
-        
+        selectedStatus = true;
+        numInventorySelected = 1;
     }
     if (keyCode === 50){
-        
+        selectedStatus = true;
+        numInventorySelected = 2;
     }
     if (keyCode === 51){
-        
+        selectedStatus = true;
+        numInventorySelected = 3;
     }
     if (keyCode === 52){
-        
+        selectedStatus = true;
+        numInventorySelected = 4;
     }
     if (keyCode === 53){
-        
+        selectedStatus = true;
+        numInventorySelected = 5;
     }
     if (keyCode === 54){
-        
+        selectedStatus = true;
+        numInventorySelected = 6;
     }
     if (keyCode === 55){
-        
+        selectedStatus = true;
+        numInventorySelected = 7;
     }
     if (keyCode === 56){
-        
+        selectedStatus = true;
+        numInventorySelected = 8;
     }
     
 }
