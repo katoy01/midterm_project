@@ -32,6 +32,14 @@ let wheatArt, wheatEmpty;
 let numInventorySelected = 0;
 let selectedStatus = false;
 
+let gate;
+let moo;
+let cluck;
+let harvest;
+let plop;
+let clickSound;
+let walk;
+
 
 // the size of each tile (32 x 32 square)
 let worldTileSize = 32;
@@ -156,25 +164,13 @@ function preload() {
     inventoryTiles[6] = loadImage('./assets/milk.png');
     inventoryTiles[7] = loadImage('./assets/egg.png');
 
-    // cornSeedsArt = loadImage('./assets/cornseeds.png');
-    //tomatoSeedsArt = loadImage('./assets/tomatoseeds.png');
-    //wheatSeedsArt = loadImage('./assets/wheatseeds.png');
-
-    //cornArt = loadImage('./assets/corn.png');
-    // wheatArt = loadImage('./assets/wheat.png');
-    // tomatoArt = loadImage('./assets/tomato.png');
-
-    // milkArt = loadImage('./assets/milk.png');
-    // eggsArt = loadImage('./assets/egg.png');
-
-    seedsEmpty = loadImage('./assets/emptySeeds.png');
-    cornEmpty = loadImage('./assets/emptyCorn.png');
-    tomatoEmpty = loadImage('./assets/emptyTomato.png');
-    wheatEmpty = loadImage('./assets/emptyWheat.png');
-    milkEmpty = loadImage('./assets/emptyMilk.png');
-    eggsEmpty = loadImage('./assets/emptyEgg.png');
-    // startbutton_image = loadImage("./assets/startButton.png");
-}
+   gate = loadSound("./assets/gate.wav");
+   moo = loadSound("./assets/moo.wav");
+   harvest = loadSound("./assets/harvest_crop.ogg");
+   walk = loadSound("./assets/walk.wav");
+   plop = loadSound("./assets/seed_plant.ogg");
+   cluck = loadSound("./assets/chicken.wav");
+   clickSound = loadSound("./assets/click.wav");
 
 
 // overlays for our world
@@ -298,12 +294,14 @@ function setup() {
 function mouseClicked() {
     if (stage === 0) {
         stage = 1;
+        clickSound.play();
     }
     if (stage === 2 && selectedStatus === true) {
         player.changeEnvironment();
         stage = 1;
         selectedStatus = false;
         numInventorySelected = 0;
+        clickSound.play();
     }
 }
 
@@ -553,16 +551,19 @@ function interactOverlay(x, y) {
             console.log(inventoryArray);
         }
         if (getOverlayTileAtPosition(x, y) === 6385) {
+            harvest.play();
             setOverlayAtPosition(-1, x, y);
             wheat.amount = wheat.amount + 1;
             console.log(inventoryArray);
         }
         if (getOverlayTileAtPosition(x, y) === 5645) {
+            harvest.play();
             setOverlayAtPosition(-1, x, y);
             corn.amount = corn.amount + 1;
             console.log(inventoryArray);
         }
         if (getOverlayTileAtPosition(x, y) === 5201) {
+            harvest.play();
             setOverlayAtPosition(-1, x, y);
             tomato.amount = tomato.amount + 1;
             console.log(inventoryArray);
@@ -572,16 +573,19 @@ function interactOverlay(x, y) {
         if (numInventorySelected == 1) {
             let plant = new Plant(x, y, 'tomato');
             plantArr.push(plant);
+            plop.play();
             tomatoSeeds.amount = tomatoSeeds.amount - 1;
         }
         if (numInventorySelected == 2) {
             let plant = new Plant(x, y, 'wheat');
             plantArr.push(plant);
+            plop.play();
             wheatSeeds.amount = wheatSeeds.amount - 1;
         }
         if (numInventorySelected == 3) {
             let plant = new Plant(x, y, 'corn');
             plantArr.push(plant);
+            plop.play();
             cornSeeds.amount = cornSeeds.amount - 1;
         }
     }
@@ -645,6 +649,13 @@ class Player {
         this.facing = [];
         this.computeSensors();
         this.walking = false;
+        if (this.walking == true){
+            walk.play();
+            walk.loop();
+        }
+        else{
+            walk.stop();
+        }
 
         if (keyIsDown(68)) {
             ellipse(this.right, this.middleY, 5, 5);
@@ -661,6 +672,8 @@ class Player {
                 this.direction = 1;
             }
             this.walking = true;
+            
+            
         }
         if (keyIsDown(65)) {
             ellipse(this.left, this.middleY, 5, 5);
@@ -869,10 +882,12 @@ class Animal {
         if (this.animalName === "cow"){
             milk.amount = milk.amount+1;
             console.log(milk.amount);
+            moo.play();
         }
         if (this.animalName === "chicken"){
             eggs.amount = eggs.amount+1;
             console.log(eggs.amount);
+            cluck.play();
         }
         this.spritePos = 0;
         this.currentFrames = 0;
@@ -986,16 +1001,3 @@ class Item {
         this.graphic = img;
     }
 }
-//put these in setup or draw
-
-
-// class inventoryItems {
-// constructor(){
-//     this.items = new Array();
-//     this.columns = 5;
-
-// }
-//     addItem(plant){
-
-//     }
-// }
