@@ -5,14 +5,11 @@ let chicken_babyArt, chickenArt, cow_baby_brownArt, cow_brownArt;
 // the size of each tile (32 x 32 square)
 let worldTileSize = 32;
 let playerTileSizeX = 32, playerTileSizeY = 32;
-let chickenTileSize = 32, cowBabyTileSize = 42;
 
 // ofsets for screen scrolling
 let offsetX = 0;
 let offsetY = -200;
 let minOffsetX, minOffsetY;
-
-let cow;
 
 let world = [
     //                          10                            20                            30                            40                            50                            60                            70                            80
@@ -119,6 +116,8 @@ let overlay = [];
 
 let player;
 let plantArr = [];
+let cow, cowBaby, chicken, chickenBaby;
+let animalArr = [];
 
 let plantInfoAll = {
     'wheat': {
@@ -133,6 +132,18 @@ let animalInfoAll = {
     'cow': {
         img: cow_brownArt,
         tileSize: 48
+    },
+    'cowBaby': {
+        img: cow_brownArt,
+        tileSize: 42
+    },
+    'chicken': {
+        img: chickenArt,
+        tileSize: 32
+    },
+    'chickenBaby': {
+        img: chicken_babyArt,
+        tileSize: 32
     }
 }
 
@@ -147,6 +158,7 @@ let animalInfoAll = {
 
 // create canvas & player object
 function setup() {
+    // imageMode(CENTER);
     createCanvas(960, 480);
     background(255);
 
@@ -158,6 +170,9 @@ function setup() {
     cow_brownArt.resize(192, 240);
 
     animalInfoAll['cow'].img = cow_brownArt;
+    animalInfoAll['cowBaby'].img = cow_baby_brownArt;
+    animalInfoAll['chicken'].img = chickenArt;
+    animalInfoAll['chickenBaby'].img = chicken_babyArt;
 
     // setup the world overlay
     setupOverlay();
@@ -169,6 +184,10 @@ function setup() {
     player = new Player(width / 2, height / 2);
 
     cow = new Animal(52, 15, 'cow');
+    cowBaby = new Animal(54, 15, 'cowBaby');
+    chicken = new Animal(66, 13, 'chicken');
+    chickenBaby = new Animal(68, 15, 'chickenBaby');
+    animalArr.push(cow, cowBaby, chicken, chickenBaby);
 }
 
 function draw() {
@@ -184,7 +203,9 @@ function draw() {
     plantArr.forEach(plant => {
         plant.display();
     })
-    cow.display();
+    animalArr.forEach(animal => {
+        animal.display();
+    })
 }
 
 // draw the entire world using the 2D array above
@@ -293,10 +314,19 @@ function isSolid(id) {
         || id == 3856 || id == 3720 || id == 3722 || id == 4588 || id == 4589 || id == 4595 || id == 4596
         || id == 4303 || id == 4304 || id == 4305 || id == 2664 || id == 2220 || id == 4444 || id == 4451
         || id == 2087 || id == 1800 || id == 1948 || id == 1947 || id == 1949 || id == 1945 || id == 1929 || id == 1946
-        || id == 4296 || id == 4592 || id == 4589 || id == 4298) {
+        || id == 4296 || id == 4592 || id == 4589 || id == 4298 || id == 2732 || id == 2733 || id == 2734 || id == 1399 || id == 1400) {
         return true;
     }
     return false;
+}
+
+function noAnimals(realX, realY, selfTileSize) {
+    for (let index = 0; index < animalArr.length; index++) {
+        if (dist(realX, realY, animalArr[index].x, animalArr[index].y) <= (animalArr[index].animalInfo.tileSize / 2 + selfTileSize / 2)) {
+            return false;
+        }
+    }
+    return true;
 }
 
 function interactOverlay(x, y) {
@@ -332,15 +362,23 @@ class Player {
         this.pauseCounterMax = 20;
 
         this.facingTile = [];
+
+        this.tileSize = 32;
     }
 
     computeSensors() {
-        this.middleX = int(this.x + playerTileSizeX / 2);
-        this.middleY = int(this.y + playerTileSizeY / 2);
-        this.left = int(this.x - 2);
-        this.right = int(this.x + playerTileSizeX + 2);
-        this.up = int(this.y - 2);
-        this.down = int(this.y + playerTileSizeY + 2);
+        this.middleX = this.x;
+        this.middleY = this.y;
+        this.left = int(this.x - this.tileSize / 2 - 2);
+        this.right = int(this.x + this.tileSize / 2 + 2);
+        this.up = int(this.y - this.tileSize / 2 - 2);
+        this.down = int(this.y + this.tileSize / 2 + 2);
+        // this.middleX = this.x + (playerTileSizeX / 2);
+        // this.middleY = this.y + (playerTileSizeX / 2);
+        // this.left = int(this.x - 2);
+        // this.right = int(this.x + playerTileSizeX + 2);
+        // this.up = int(this.y - 2);
+        // this.down = int(this.y + playerTileSizeY + 2);
     }
 
     changeEnvironment() {
@@ -356,6 +394,7 @@ class Player {
     }
 
     moveAndDisplay() {
+        imageMode(CENTER);
         this.facing = [];
         this.computeSensors();
         this.walking = false;
@@ -364,7 +403,7 @@ class Player {
             ellipse(this.right, this.middleY, 5, 5);
             let id = getWorldTileAtPosition(this.right, this.middleY);
             let id2 = getOverlayTileAtPosition(this.right, this.middleY);
-            if (!isSolid(id) && !isSolid(id2)) {
+            if (!isSolid(id) && !isSolid(id2) && noAnimals(this.right - offsetX, this.middleY - offsetY, this.tileSize)) {
                 if (offsetX > minOffsetX && this.x === (width / 2)) {
                     offsetX -= this.speed;
                 } else {
@@ -380,7 +419,7 @@ class Player {
             ellipse(this.left, this.middleY, 5, 5);
             let id = getWorldTileAtPosition(this.left, this.middleY);
             let id2 = getOverlayTileAtPosition(this.left, this.middleY);
-            if (!isSolid(id) && !isSolid(id2)) {
+            if (!isSolid(id) && !isSolid(id2) && noAnimals(this.left - offsetX, this.middleY - offsetY, this.tileSize)) {
                 if (offsetX < 0 && this.x === (width / 2)) {
                     offsetX += this.speed;
                 } else {
@@ -396,7 +435,7 @@ class Player {
             ellipse(this.middleX, this.up, 5, 5);
             let id = getWorldTileAtPosition(this.middleX, this.up);
             let id2 = getOverlayTileAtPosition(this.middleX, this.up);
-            if (!isSolid(id) && !isSolid(id2)) {
+            if (!isSolid(id) && !isSolid(id2) && noAnimals(this.middleX - offsetX, this.up - offsetY, this.tileSize)) {
                 if (offsetY < 0 && this.y === (height / 2)) {
                     offsetY += this.speed;
                 } else {
@@ -412,7 +451,7 @@ class Player {
             ellipse(this.middleX, this.down, 5, 5);
             let id = getWorldTileAtPosition(this.middleX, this.down);
             let id2 = getOverlayTileAtPosition(this.middleX, this.down);
-            if (!isSolid(id) && !isSolid(id2)) {
+            if (!isSolid(id) && !isSolid(id2) && noAnimals(this.middleX - offsetX, this.down - offsetY, this.tileSize)) {
                 if (offsetY > minOffsetY && this.y === (height / 2)) {
                     offsetY -= this.speed;
                 } else {
@@ -441,6 +480,7 @@ class Player {
         } else {
             drawTile(playerArtwork, (this.direction * 4), playerTileSizeX, playerTileSizeY, this.x, this.y);
         }
+        imageMode(CORNER);
     }
 }
 
@@ -479,10 +519,17 @@ class Animal {
     constructor(arrayX, arrayY, animalName) {
         this.x = arrayX * worldTileSize;
         this.y = arrayY * worldTileSize;
+
+        console.log(this.x, this.y);
+        this.animalName = animalName;
         this.animalInfo = animalInfoAll[animalName];
         this.spritePos = 0;
-        this.maxFrames = 120;
         this.currentFrames = 0;
+        this.maxFrames = 20;
+        this.walkingTimer = 0;
+        this.maxWalkingTimer = 160;
+        this.restingTimer = 239;
+        this.maxRestingTimer = 240;
         // 0 = growing
         // 1 = harvestable
         this.state = 0;
@@ -492,10 +539,138 @@ class Animal {
         // 3 = right
         // 4 = sleeping
         this.direction = 0;
+        this.tilesPerRow = this.animalInfo.img.width / this.animalInfo.tileSize;
+        this.walking = false;
+        this.speed = 0.2;
+        this.destination = 0;
+    }
+
+    noAnimalsOrPlayer(realX, realY) {
+        for (let index = 0; index < animalArr.length; index++) {
+            if (animalArr[index] === this) {
+                continue;
+            }
+            if (dist(realX, realY, animalArr[index].x, animalArr[index].y)
+                <= (animalArr[index].animalInfo.tileSize / 2 + this.animalInfo.tileSize / 2)) {
+                return false;
+            }
+        }
+        if (dist(realX, realY, player.x - offsetX, player.y - offsetY) <= player.tileSize / 2 + this.animalInfo.tileSize / 2) {
+            return false;
+        }
+        return true;
+    }
+
+    getWorldTileAtPosition(realX, realY) {
+        // convert screen coordinates into array coordinates
+        let arrayX = int(realX / worldTileSize);
+        let arrayY = int(realY / worldTileSize);
+
+        let id = world[arrayY][arrayX];
+        return id;
+    }
+
+    getOverlayTileAtPosition(realX, realY) {
+        // convert screen coordinates into array coordinates
+        let arrayX = int(realX / worldTileSize);
+        let arrayY = int(realY / worldTileSize);
+
+        let id = overlay[arrayY][arrayX];
+        return id;
     }
 
     display() {
-        drawTile(this.animalInfo.img, this.spritePos, this.animalInfo.tileSize, this.animalInfo.tileSize,
-            this.x + offsetX, this.y + offsetY);
+        imageMode(CENTER);
+        // this chicken png has the left and right images flipped from the others :(
+        // how inconvenient
+        if (this.animalName === 'chicken') {
+            let directionTemp;
+            if (this.direction === 2) {
+                directionTemp = 3;
+            } else if (this.direction === 3) {
+                directionTemp = 2;
+            } else {
+                directionTemp = this.direction;
+            }
+            drawTile(this.animalInfo.img, (directionTemp * this.tilesPerRow) + this.spritePos,
+                this.animalInfo.tileSize, this.animalInfo.tileSize,
+                this.x + offsetX, this.y + offsetY);
+        } else {
+            drawTile(this.animalInfo.img, (this.direction * this.tilesPerRow) + this.spritePos,
+                this.animalInfo.tileSize, this.animalInfo.tileSize,
+                this.x + offsetX, this.y + offsetY);
+        }
+
+        if (this.walking) {
+            if (this.currentFrames >= this.maxFrames) {
+                if (this.spritePos + 1 < this.tilesPerRow) {
+                    this.spritePos++;
+                } else {
+                    this.spritePos = 0;
+                }
+                this.currentFrames = 0;
+            }
+            this.currentFrames++;
+
+            if (this.direction === 0) {
+                this.y += this.speed;
+            } else if (this.direction === 1) {
+                this.y -= this.speed;
+            } else if (this.direction === 2) {
+                this.x -= this.speed;
+            } else if (this.direction === 3) {
+                this.x += this.speed;
+            }
+
+            if (this.walkingTimer >= this.maxWalkingTimer) {
+                this.walkingTimer = 0;
+                this.walking = false;
+            }
+            this.walkingTimer++;
+        } else {
+            this.spritePos = 0;
+            this.restingTimer++;
+            if (this.restingTimer >= this.maxRestingTimer) {
+                this.direction = int(random(5));
+                this.restingTimer = 0;
+
+                if (this.direction === 0) {
+                    if (!isSolid(this.getWorldTileAtPosition(this.x, this.y + (this.maxWalkingTimer * this.speed)))
+                        && !isSolid(this.getOverlayTileAtPosition(this.x, this.y + (this.maxWalkingTimer * this.speed)))
+                        && this.noAnimalsOrPlayer(this.x, this.y + (this.maxWalkingTimer * this.speed))) {
+                        if (random(3) < 2) {
+                            this.walking = true;
+                        }
+                    }
+                } else if (this.direction === 1) {
+                    if (!isSolid(this.getWorldTileAtPosition(this.x, this.y - (this.maxWalkingTimer * this.speed)))
+                        && !isSolid(this.getOverlayTileAtPosition(this.x, this.y - (this.maxWalkingTimer * this.speed)))
+                        && this.noAnimalsOrPlayer(this.x, this.y - (this.maxWalkingTimer * this.speed))) {
+                        if (random(3) < 2) {
+                            this.walking = true;
+                        }
+                    }
+                } else if (this.direction === 2) {
+                    if (!isSolid(this.getWorldTileAtPosition(this.x - (this.maxWalkingTimer * this.speed), this.y))
+                        && !isSolid(this.getOverlayTileAtPosition(this.x - (this.maxWalkingTimer * this.speed), this.y))
+                        && this.noAnimalsOrPlayer(this.x - (this.maxWalkingTimer * this.speed), this.y)) {
+                        if (random(3) < 2) {
+                            this.walking = true;
+                        }
+                    }
+                } else if (this.direction === 3) {
+                    if (!isSolid(this.getWorldTileAtPosition(this.x + (this.maxWalkingTimer * this.speed), this.y))
+                        && !isSolid(this.getOverlayTileAtPosition(this.x + (this.maxWalkingTimer * this.speed), this.y))
+                        && this.noAnimalsOrPlayer(this.x + (this.maxWalkingTimer * this.speed), this.y)) {
+                        if (random(3) < 2) {
+                            this.walking = true;
+                        }
+                    }
+                } else {
+                    this.walking = true;
+                }
+            }
+        }
+        imageMode(CORNER);
     }
 }
