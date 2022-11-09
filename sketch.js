@@ -13,6 +13,7 @@ let inventoryArtwork;
 let inventoryArray = [];
 let inventoryTiles = [];
 let displayItems = [];
+
 let inventoryItems;
 let cornSeeds;
 let wheatSeeds;
@@ -37,8 +38,10 @@ let numInventorySelected = -1;
 let selectedStatus = false;
 
 let gate;
-let moo;
-let cluck;
+let adultMoo;
+let calfMoo;
+let adultChicken;
+let chicks;
 let harvest;
 let plop;
 let clickSound;
@@ -222,11 +225,13 @@ function preload() {
     inventoryTiles[7] = loadImage('./assets/image/egg.png');
 
     gate = loadSound("./assets/sound/gate.wav");
-    moo = loadSound("./assets/sound/moo.wav");
+    calfMoo = loadSound("./assets/sound/babymoo.wav");
+    adultMoo = loadSound("./assets/sound/adultmoo.wav");
     harvest = loadSound("./assets/sound/harvest_crop.ogg");
     walk = loadSound("./assets/sound/walk.wav");
     plop = loadSound("./assets/sound/seed_plant.ogg");
-    cluck = loadSound("./assets/sound/chicken.wav");
+    adultChicken = loadSound("./assets/sound/chicken.wav");
+    chicks = loadSound("./assets/sound/chicks.wav");
     clickSound = loadSound("./assets/sound/click.wav");
 }
 
@@ -499,8 +504,10 @@ function interactOverlay(x, y) {
     // console.log(int((x - offsetX) / worldTileSize), int((y - offsetY) / worldTileSize));
     if (getOverlayTileAtPosition(x, y) === 4299) {
         setOverlayAtPosition(4300, x, y);
+        gate.play();
     } else if (getOverlayTileAtPosition(x, y) === 4300) {
         setOverlayAtPosition(4299, x, y);
+        gate.play();
     }
     if (getWorldTileAtPosition(x, y) === 1353) {
         if (getOverlayTileAtPosition(x, y) === -1) {
@@ -640,13 +647,6 @@ class Player {
         this.facing = [];
         this.computeSensors();
         this.walking = false;
-        if (this.walking == true) {
-            walk.play();
-            walk.loop();
-        }
-        else {
-            walk.stop();
-        }
 
         if (keyIsDown(68)) {
             // ellipse(this.right, this.middleY, 5, 5);
@@ -665,6 +665,7 @@ class Player {
             this.walking = true;
 
 
+
         }
         if (keyIsDown(65)) {
             // ellipse(this.left, this.middleY, 5, 5);
@@ -681,6 +682,7 @@ class Player {
                 this.direction = 2;
             }
             this.walking = true;
+
         }
         if (keyIsDown(87)) {
             // ellipse(this.middleX, this.up, 5, 5);
@@ -697,6 +699,7 @@ class Player {
                 this.direction = 3;
             }
             this.walking = true;
+
         }
         if (keyIsDown(83)) {
             // ellipse(this.middleX, this.down, 5, 5);
@@ -713,6 +716,7 @@ class Player {
                 this.direction = 0;
             }
             this.walking = true;
+
         }
 
         // frame animation
@@ -729,6 +733,7 @@ class Player {
 
             drawTile(playerArtwork, (this.direction * 4) + this.currentFrame, playerTileSizeX, playerTileSizeY, this.x, this.y);
         } else {
+
             drawTile(playerArtwork, (this.direction * 4), playerTileSizeX, playerTileSizeY, this.x, this.y);
         }
         imageMode(CORNER);
@@ -872,13 +877,22 @@ class Animal {
         }
         if (this.animalName === "cow") {
             milk.amount = milk.amount + 1;
-            // console.log(milk.amount);
-            moo.play();
+            console.log(milk.amount);
+            adultMoo.play();
+
+        }
+        if (this.animalName === "cowBaby") {
+            calfMoo.play();
+
         }
         if (this.animalName === "chicken") {
             eggs.amount = eggs.amount + 1;
-            // console.log(eggs.amount);
-            cluck.play();
+            console.log(eggs.amount);
+            adultChicken.play();
+        }
+        if (this.animalName === "chickenBaby") {
+            chicks.play();
+
         }
         this.spritePos = 0;
         this.currentFrames = 0;
