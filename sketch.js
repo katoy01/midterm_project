@@ -29,7 +29,7 @@ let cornArt, cornEmpty;
 let tomatoArt, tomatoEmpty;
 let wheatArt, wheatEmpty;
 
-let numInventorySelected;
+let numInventorySelected = 0;
 let selectedStatus = false;
 
 
@@ -295,6 +295,18 @@ function setup() {
 
 }
 
+function mouseClicked() {
+    if (stage === 0) {
+        stage = 1;
+    }
+    if (stage === 2 && selectedStatus === true) {
+        player.changeEnvironment();
+        stage = 1;
+        selectedStatus = false;
+        numInventorySelected = 0;
+    }
+}
+
 function draw() {
     // draw the world and the character
 
@@ -370,12 +382,6 @@ function draw() {
         fill(255);
 
     }
-
-    if (mouseIsPressed == true) {
-        stage = 1;
-        mouseIsPressed = false;
-    }
-
 }
 
 // draw the entire world using the 2D array above
@@ -444,40 +450,42 @@ function getOverlayTileAtPosition(screenX, screenY) {
 }
 
 function keyPressed() {
-    if (keyCode === 13) {
+    if (keyCode === 13 && stage === 1) {
         player.changeEnvironment();
     }
-    if (keyCode === 49) {
-        selectedStatus = true;
-        numInventorySelected = 1;
-    }
-    if (keyCode === 50) {
-        selectedStatus = true;
-        numInventorySelected = 2;
-    }
-    if (keyCode === 51) {
-        selectedStatus = true;
-        numInventorySelected = 3;
-    }
-    if (keyCode === 52) {
-        selectedStatus = true;
-        numInventorySelected = 4;
-    }
-    if (keyCode === 53) {
-        selectedStatus = true;
-        numInventorySelected = 5;
-    }
-    if (keyCode === 54) {
-        selectedStatus = true;
-        numInventorySelected = 6;
-    }
-    if (keyCode === 55) {
-        selectedStatus = true;
-        numInventorySelected = 7;
-    }
-    if (keyCode === 56) {
-        selectedStatus = true;
-        numInventorySelected = 8;
+    if (stage === 2) {
+        if (keyCode === 49) {
+            selectedStatus = true;
+            numInventorySelected = 1;
+        }
+        if (keyCode === 50) {
+            selectedStatus = true;
+            numInventorySelected = 2;
+        }
+        if (keyCode === 51) {
+            selectedStatus = true;
+            numInventorySelected = 3;
+        }
+        if (keyCode === 52) {
+            selectedStatus = true;
+            numInventorySelected = 4;
+        }
+        if (keyCode === 53) {
+            selectedStatus = true;
+            numInventorySelected = 5;
+        }
+        if (keyCode === 54) {
+            selectedStatus = true;
+            numInventorySelected = 6;
+        }
+        if (keyCode === 55) {
+            selectedStatus = true;
+            numInventorySelected = 7;
+        }
+        if (keyCode === 56) {
+            selectedStatus = true;
+            numInventorySelected = 8;
+        }
     }
 
 }
@@ -542,16 +550,39 @@ function interactOverlay(x, y) {
     if (getWorldTileAtPosition(x, y) === 1353) {
         if (getOverlayTileAtPosition(x, y) === -1) {
             stage = 2;
-            let plant = new Plant(x, y, 'wheat');
-            plantArr.push(plant);
-            wheatSeeds.amount = wheatSeeds.amount - 1;
             console.log(inventoryArray);
         }
         if (getOverlayTileAtPosition(x, y) === 6385) {
             setOverlayAtPosition(-1, x, y);
             wheat.amount = wheat.amount + 1;
-            //inventoryArray.push(wheat.amount);
             console.log(inventoryArray);
+        }
+        if (getOverlayTileAtPosition(x, y) === 5645) {
+            setOverlayAtPosition(-1, x, y);
+            corn.amount = corn.amount + 1;
+            console.log(inventoryArray);
+        }
+        if (getOverlayTileAtPosition(x, y) === 5201) {
+            setOverlayAtPosition(-1, x, y);
+            tomato.amount = tomato.amount + 1;
+            console.log(inventoryArray);
+        }
+    }
+    if (stage === 2 && selectedStatus === true) {
+        if (numInventorySelected == 1) {
+            let plant = new Plant(x, y, 'tomato');
+            plantArr.push(plant);
+            tomatoSeeds.amount = tomatoSeeds.amount - 1;
+        }
+        if (numInventorySelected == 2) {
+            let plant = new Plant(x, y, 'wheat');
+            plantArr.push(plant);
+            wheatSeeds.amount = wheatSeeds.amount - 1;
+        }
+        if (numInventorySelected == 3) {
+            let plant = new Plant(x, y, 'corn');
+            plantArr.push(plant);
+            cornSeeds.amount = cornSeeds.amount - 1;
         }
     }
 
