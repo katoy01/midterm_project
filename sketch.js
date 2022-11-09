@@ -192,13 +192,13 @@ let plantInfoAll = {
         harvestableId: 6385,
         inventoryId: 5969
     },
-    'tomato' : {
+    'tomato': {
         bagId: 5195,
         sproutArr: [5196, 5197, 5198, 5199, 5200],
         harvestableId: 5201,
         inventoryId: 5961
     },
-    'corn' : {
+    'corn': {
         bagId: 5639,
         sproutArr: [5640, 5641, 5642, 5643, 5644],
         harvestableId: 5645,
@@ -546,15 +546,37 @@ function interactOverlay(x, y) {
         
         if (getOverlayTileAtPosition(x, y) === -1) {
             stage = 2;
+            if (numInventorySelected == 1){
+            let plant = new Plant(x, y, 'tomato');
+            plantArr.push(plant);
+            tomatoSeeds.amount = tomatoSeeds.amount - 1;
+            }
+            if (numInventorySelected == 2){
             let plant = new Plant(x, y, 'wheat');
             plantArr.push(plant);
             wheatSeeds.amount = wheatSeeds.amount - 1;
+            }
+            if (numInventorySelected == 3){
+            let plant = new Plant(x, y, 'corn');
+            plantArr.push(plant);
+            cornSeeds.amount = cornSeeds.amount - 1;
+            }
+            
             console.log(inventoryArray);
         }
         if (getOverlayTileAtPosition(x, y) === 6385){
             setOverlayAtPosition(1353, x, y);
             wheat.amount = wheat.amount+1;
-            //inventoryArray.push(wheat.amount);
+            console.log(inventoryArray);
+        }
+        if (getOverlayTileAtPosition(x, y) === 5645){
+            setOverlayAtPosition(1353, x, y);
+            corn.amount = corn.amount+1;
+            console.log(inventoryArray);
+        }
+        if (getOverlayTileAtPosition(x, y) === 5201){
+            setOverlayAtPosition(1353, x, y);
+            tomato.amount = tomato.amount+1;
             console.log(inventoryArray);
         }
     }
