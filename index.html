@@ -27,10 +27,7 @@
         align-items: center;
         font-size: 25px;
         /* align-content: flex-start; */
-
       }
-      
-  
       #gameCanvas{
         margin: 20;
         padding: 30px;
@@ -43,9 +40,33 @@
         /* This centers our sketch vertically. */
         align-items: center;
       }
+      p {
+        color: #fff;
+        text-align: justify;
+        inline-size: 1000px;
+        overflow-wrap: normal;
+        font-family: monospace;
+        margin: 30px;
+      }
+      h1 {
+        color: rgb(40, 31, 27);
+        text-align: center;
+        font-family: monospace;
+        font-size: 2.5rem;
+        font-weight: bold;
+      }
+      .section {
+        border: 3px;
+        border-style: solid;
+        border-color: darkgray;
+        background-color: rgb(50, 43, 17);
+        margin-bottom: 20px;
+      }
     </style>
   </head>
   <body>
+    <h1>Midterm Project ("Let's Grow")</h1>
+    <h1>by Toné Nanna and Yoshiaki Kato</h1>
     
     <br>
     <div id="start"> 
@@ -55,7 +76,23 @@
     </div>
     <div id="directions">
       
-      <div>Use WASD keys to move. Press enter to interact with animals, plant seeds, and harvest.</div>
+      <div>
+        <div class="section">
+          <p>Story</p>
+          <p>You play as a farmer who gained their dying grandfather’s farmland to work for themself to grow crops and gather produce from animals. You are given a minimal amount of seeds from your grandfather and you will have to grow as a farmer to gain more seeds and more farmland. (We plan to expand the game to have a shop where you can buy different types of seeds and farming animals, and also include a restaurant/cooking component as well).
+        </div>
+        <div class="section">
+          <p> Instructions</p>
+          <p>Player movement: WASD<br/>
+            Interact button: ‘ENTER’ (note: you can interact with gates, farmland, and animals)<br/>
+            Inventory: Number buttons 1-8</p>  
+        </div>
+
+        <div class="section">
+          <p>Details:</p>
+          <p>You can move the player using WASD keys, moving up, left, down and right respectively. To enter the farm plots, you must click “enter” when your player is facing and touching the gate which changes the tile to an open gate that allows the player to pass. When you are in the farm plots you can press “enter” when your player is facing and touching a dirt tile to enter the player’s inventory. In the player’s inventory, you will see the three seeds the player has access to: corn, wheat, and tomatoes, as well as milk and eggs which are collected from the animals. You select what inventory object you want to use by pressing a number key 1-8. With a seed selected, you can plant it by clicking the mouse, which will lead you back to the farm world with the crop planted in front of you. This action will remove 1 seed from your inventory. To harvest crops, you press “enter” which will add 1 crop to your inventory. This can be seen in the bar at the bottom of the screen. When you are done farming, you can leave through the gate, pressing “enter” to close it behind you. o interact with the animals, press “enter,” which will make them look towards your direction if you are facing it. Interacting with an adult cow will add one milk to your inventory, and the same is true for the adult chicken which will add one egg. The player can interact with the calf and chick within the pen, but you will get no milk or eggs from them. </p>
+        </div>
+      </div>
       
     </div>
     
