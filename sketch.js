@@ -225,14 +225,9 @@ let animalInfoAll = {
     }
 }
 
-
-// function allDone(worldData) {
-//     console.log("here");
-// }
-
-// function badStuffHappened(result) {
-//     console.log(result);
-// }
+/**
+ * p5 FUNCTIONS
+ */
 
 // create canvas & player object
 function setup() {
@@ -242,6 +237,8 @@ function setup() {
     // cellWidth = width/columns;
     // cellHeight = height / 4;
 
+    stroke(0);
+    strokeWeight(1);
 
     // inventory = createGraphics(cnv.parent.width, cnv.parent.height)
     rows = 1;
@@ -291,8 +288,6 @@ function setup() {
         inventoryArray.push(i);
         // } 
     };
-
-
 }
 
 function mouseClicked() {
@@ -305,6 +300,52 @@ function mouseClicked() {
         selectedStatus = false;
         numInventorySelected = 0;
     }
+}
+
+function keyPressed() {
+    if (keyCode === 13 && stage === 1) {
+        player.changeEnvironment();
+    }
+    if (stage === 2) {
+        if (keyCode === 49) {
+            selectedStatus = true;
+            numInventorySelected = 1;
+        }
+        if (keyCode === 50) {
+            selectedStatus = true;
+            numInventorySelected = 2;
+        }
+        if (keyCode === 51) {
+            selectedStatus = true;
+            numInventorySelected = 3;
+        }
+        if (keyCode === 52) {
+            selectedStatus = true;
+            numInventorySelected = 4;
+        }
+        if (keyCode === 53) {
+            selectedStatus = true;
+            numInventorySelected = 5;
+        }
+        if (keyCode === 54) {
+            selectedStatus = true;
+            numInventorySelected = 6;
+        }
+        if (keyCode === 55) {
+            selectedStatus = true;
+            numInventorySelected = 7;
+        }
+        if (keyCode === 56) {
+            selectedStatus = true;
+            numInventorySelected = 8;
+        }
+        if (keyCode === 27) {
+            selectedStatus = false;
+            numInventorySelected = 0;
+            stage = 1;
+        }
+    }
+
 }
 
 function draw() {
@@ -330,59 +371,72 @@ function draw() {
         animalArr.forEach(animal => {
             animal.moveAndDisplay();
         })
-
     }
+
     if (stage === 2) {
         background(255);
         inventoryBuffer = createGraphics(660, 330);
         inventoryBuffer.image(inventoryCanvas, 0, 0);
         image(inventoryBuffer, 0, 0);
+        displaySelectedBox(numInventorySelected);
         //image(inventoryCanvas,0,0,960,480);
         textAlign(CENTER);
         fill(0);
         textSize(15);
-        text("Please enter what number you want to use", width - width / 5, height / 4);
         if (selectedStatus == true) {
             if (numInventorySelected == 1) {
                 text("You selected tomato seeds. You have " + tomatoSeeds.amount + " left", width - width / 5, height / 4 + 25);
-                text("Click To Continue", width - width / 5 + 20, height / 4 + 50);
+                text("Click To Continue", width - width / 5, height / 4 + 50);
+                text("Press `esc` to go back", width - width / 5, height / 4 + 75);
             }
             if (numInventorySelected == 2) {
                 text("You selected wheat seeds. You have " + wheatSeeds.amount + " left", width - width / 5, height / 4 + 25);
-                text("Click To Continue", width - width / 5 + 20, height / 4 + 50);
+                text("Click To Continue", width - width / 5, height / 4 + 50);
+                text("Press `esc` to go back", width - width / 5, height / 4 + 75);
             }
             if (numInventorySelected == 3) {
                 text("You selected corn seeds. You have " + cornSeeds.amount + " left", width - width / 5, height / 4 + 25);
-                text("Click To Continue", width - width / 5 + 20, height / 4 + 50);
+                text("Click To Continue", width - width / 5, height / 4 + 50);
+                text("Press `esc` to go back", width - width / 5, height / 4 + 75);
             }
             if (numInventorySelected == 4) {
                 text("You selected tomatos. You have " + tomato.amount + " left", width - width / 5, height / 4 + 25);
-                text("Click To Continue", width - width / 5 + 20, height / 4 + 50);
+                text("Click To Continue", width - width / 5, height / 4 + 50);
+                text("Press `esc` to go back", width - width / 5, height / 4 + 75);
             }
             if (numInventorySelected == 5) {
                 text("You selected wheat. You have " + wheat.amount + " left", width - width / 5, height / 4 + 25);
-                text("Click To Continue", width - width / 5 + 20, height / 4 + 50);
+                text("Click To Continue", width - width / 5, height / 4 + 50);
+                text("Press `esc` to go back", width - width / 5, height / 4 + 75);
             }
             if (numInventorySelected == 6) {
                 text("You selected corn. You have " + corn.amount + " left", width - width / 5, height / 4 + 25);
-                text("Click To Continue", width - width / 5 + 20, height / 4 + 50);
+                text("Click To Continue", width - width / 5, height / 4 + 50);
+                text("Press `esc` to go back", width - width / 5, height / 4 + 75);
             }
 
             if (numInventorySelected == 7) {
                 text("You selected milk. You have " + milk.amount + " left", width - width / 5, height / 4 + 25);
-                text("Click To Continue", width - width / 5 + 20, height / 4 + 50);
+                text("Click To Continue", width - width / 5, height / 4 + 50);
+                text("Press `esc` to go back", width - width / 5, height / 4 + 75);
             }
             if (numInventorySelected == 8) {
                 text("You selected eggs. You have " + eggs.amount + " left", width - width / 5, height / 4 + 25);
-                text("Click To Continue", width - width / 5 + 20, height / 4 + 50);
+                text("Click To Continue", width - width / 5, height / 4 + 50);
+                text("Press `esc` to go back", width - width / 5, height / 4 + 75);
             }
-
+        } else {
+            text("Please enter what number you want to use", width - width / 5, height / 4 + 25);
+            text("Press `esc` to go back", width - width / 5, height / 4 + 50);
         }
-
         fill(255);
-
     }
 }
+
+
+/**
+ * HELPER FUNCTIONS
+ */
 
 // draw the entire world using the 2D array above
 function drawWorld() {
@@ -448,48 +502,6 @@ function getOverlayTileAtPosition(screenX, screenY) {
     let id = overlay[arrayY][arrayX];
     return id;
 }
-
-function keyPressed() {
-    if (keyCode === 13 && stage === 1) {
-        player.changeEnvironment();
-    }
-    if (stage === 2) {
-        if (keyCode === 49) {
-            selectedStatus = true;
-            numInventorySelected = 1;
-        }
-        if (keyCode === 50) {
-            selectedStatus = true;
-            numInventorySelected = 2;
-        }
-        if (keyCode === 51) {
-            selectedStatus = true;
-            numInventorySelected = 3;
-        }
-        if (keyCode === 52) {
-            selectedStatus = true;
-            numInventorySelected = 4;
-        }
-        if (keyCode === 53) {
-            selectedStatus = true;
-            numInventorySelected = 5;
-        }
-        if (keyCode === 54) {
-            selectedStatus = true;
-            numInventorySelected = 6;
-        }
-        if (keyCode === 55) {
-            selectedStatus = true;
-            numInventorySelected = 7;
-        }
-        if (keyCode === 56) {
-            selectedStatus = true;
-            numInventorySelected = 8;
-        }
-    }
-
-}
-
 
 function setOverlayAtPosition(id, screenX, screenY) {
     // convert screen coordinates into array coordinates
@@ -585,9 +597,37 @@ function interactOverlay(x, y) {
             cornSeeds.amount = cornSeeds.amount - 1;
         }
     }
-
 }
 
+function displaySelectedBox(itemNum) {
+    if (!selectedStatus) {
+        return;
+    }
+
+    stroke(255);
+    strokeWeight(3);
+
+    let yMin, yMax, xMin, xMax;
+    let itemSize = 37;
+    let itemDist = itemSize + 9;
+    yMin = 160;
+    yMax = yMin + itemSize;
+
+    xMin = 87 + ((itemNum - 1) * itemDist);
+    xMax = xMin + itemSize;
+
+    line(xMin, yMin, xMax, yMin);
+    line(xMin, yMax, xMax, yMax);
+    line(xMin, yMin, xMin, yMax);
+    line(xMax, yMin, xMax, yMax);
+
+    noStroke();
+}
+
+
+/**
+ * CLASSES
+ */
 class Player {
     constructor(x, y) {
         this.x = x;
@@ -647,7 +687,7 @@ class Player {
         this.walking = false;
 
         if (keyIsDown(68)) {
-            ellipse(this.right, this.middleY, 5, 5);
+            // ellipse(this.right, this.middleY, 5, 5);
             let id = getWorldTileAtPosition(this.right, this.middleY);
             let id2 = getOverlayTileAtPosition(this.right, this.middleY);
             if (!isSolid(id) && !isSolid(id2) && noAnimals(this.right - offsetX, this.middleY - offsetY, this.tileSize)) {
@@ -663,7 +703,7 @@ class Player {
             this.walking = true;
         }
         if (keyIsDown(65)) {
-            ellipse(this.left, this.middleY, 5, 5);
+            // ellipse(this.left, this.middleY, 5, 5);
             let id = getWorldTileAtPosition(this.left, this.middleY);
             let id2 = getOverlayTileAtPosition(this.left, this.middleY);
             if (!isSolid(id) && !isSolid(id2) && noAnimals(this.left - offsetX, this.middleY - offsetY, this.tileSize)) {
@@ -679,7 +719,7 @@ class Player {
             this.walking = true;
         }
         if (keyIsDown(87)) {
-            ellipse(this.middleX, this.up, 5, 5);
+            // ellipse(this.middleX, this.up, 5, 5);
             let id = getWorldTileAtPosition(this.middleX, this.up);
             let id2 = getOverlayTileAtPosition(this.middleX, this.up);
             if (!isSolid(id) && !isSolid(id2) && noAnimals(this.middleX - offsetX, this.up - offsetY, this.tileSize)) {
@@ -695,7 +735,7 @@ class Player {
             this.walking = true;
         }
         if (keyIsDown(83)) {
-            ellipse(this.middleX, this.down, 5, 5);
+            // ellipse(this.middleX, this.down, 5, 5);
             let id = getWorldTileAtPosition(this.middleX, this.down);
             let id2 = getOverlayTileAtPosition(this.middleX, this.down);
             if (!isSolid(id) && !isSolid(id2) && noAnimals(this.middleX - offsetX, this.down - offsetY, this.tileSize)) {
