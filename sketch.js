@@ -46,6 +46,7 @@ let harvest;
 let plop;
 let clickSound;
 let walk;
+let field_theme;
 
 
 // The size of each tile (32 x 32 square)
@@ -239,11 +240,13 @@ function preload() {
     adultChicken = loadSound("./assets/sound/chicken.wav");
     chicks = loadSound("./assets/sound/chicks.wav");
     clickSound = loadSound("./assets/sound/click.wav");
+    field_theme = loadSound('./assets/sound/field_theme.wav');
 }
 
 // Create canvas, build world and overlay,
 // create player, create animals
 function setup() {
+    field_theme.loop();
     cnv = createCanvas(960, 480);
     background(255);
     cnv.parent('gameCanvas');
