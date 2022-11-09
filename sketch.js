@@ -204,7 +204,7 @@ function draw() {
         plant.display();
     })
     animalArr.forEach(animal => {
-        animal.display();
+        animal.moveAndDisplay();
     })
 }
 
@@ -382,14 +382,23 @@ class Player {
     }
 
     changeEnvironment() {
+        let tempX, tempY;
         if (this.direction === 0) {
-            interactOverlay(this.middleX, this.down);
+            tempX = this.middleX;
+            tempY = this.down;
         } else if (this.direction === 1) {
-            interactOverlay(this.right, this.middleY);
+            tempX = this.right;
+            tempY = this.middleY;
         } else if (this.direction === 2) {
-            interactOverlay(this.left, this.middleY);
+            tempX = this.left;
+            tempY = this.middleY;
         } else {
-            interactOverlay(this.middleX, this.up);
+            tempX = this.middleX;
+            tempY = this.up;
+        }
+        interactOverlay(tempX, tempY);
+        for (let index = 0; index < animalArr.length; index++) {
+            animalArr[index].lookAtPlayer(tempX, tempY);
         }
     }
 
@@ -542,7 +551,6 @@ class Animal {
         this.tilesPerRow = this.animalInfo.img.width / this.animalInfo.tileSize;
         this.walking = false;
         this.speed = 0.2;
-        this.destination = 0;
     }
 
     noAnimalsOrPlayer(realX, realY) {
@@ -579,7 +587,55 @@ class Animal {
         return id;
     }
 
-    display() {
+    lookAtPlayer(screenX, screenY) {
+        let realX = screenX - offsetX;
+        let realY = screenY - offsetY;
+        if (dist(realX, realY, this.x, this.y) > (this.animalInfo.tileSize / 2 + player.tileSize / 2)) {
+            return;
+        }
+        let slope;
+        if (realX < this.x) {
+            slope = (this.y - realY) / (this.x - realX);
+        } else {
+            slope = (realY - this.y) / (realX - this.x);
+        }
+        if (slope > 0) {
+            if (slope < 1) {
+                if (this.x > realX) {
+                    this.direction = 2;
+                } else {
+                    this.direction = 3;
+                }
+            } else {
+                if (this.y > realY) {
+                    this.direction = 1;
+                } else {
+                    this.direction = 0;
+                }
+            }
+        } else {
+            if (slope > -1) {
+                if (this.x > realX) {
+                    this.direction = 2;
+                } else {
+                    this.direction = 3;
+                }
+            } else {
+                if (this.y > realY) {
+                    this.direction = 1;
+                } else {
+                    this.direction = 0;
+                }
+            }
+        }
+        this.spritePos = 0;
+        this.currentFrames = 0;
+        this.walkingTimer = 0;
+        this.restingTimer = 0;
+        this.walking = false;
+    }
+
+    moveAndDisplay() {
         imageMode(CENTER);
         // this chicken png has the left and right images flipped from the others :(
         // how inconvenient
