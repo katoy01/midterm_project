@@ -1,6 +1,15 @@
 // graphic to hold all of our tiles as one big image
 let tilesetArtwork, playerArtwork;
 let chicken_babyArt, chickenArt, cow_baby_brownArt, cow_brownArt;
+let state = 1;
+let cnv;
+let inventory;
+let emptyInventory;
+let startImage;
+
+// let startdiv = select("start");
+// let gamecnv = select("gameCanvas");
+
 
 // the size of each tile (32 x 32 square)
 let worldTileSize = 32;
@@ -109,6 +118,8 @@ function preload() {
     chickenArt = loadImage('./assets/chicken.png');
     cow_baby_brownArt = loadImage('./assets/cow_baby_brown.png');
     cow_brownArt = loadImage('./assets/cow_brown.png');
+    startImage = loadImage("./assets/startScreen.jpg");
+    // startbutton_image = loadImage("./assets/startButton.png");
 }
 
 // overlays for our world
@@ -125,6 +136,18 @@ let plantInfoAll = {
         sproutArr: [6380, 6381, 6382, 6383, 6384],
         harvestableId: 6385,
         inventoryId: 5969
+    }
+    'tomato' : {
+        bagId: 5195,
+        sproutArr: [5196, 5197, 5198, 5199, 5200],
+        harvestableId: 5201,
+        inventoryId: 5961
+    }
+    'corn' : {
+        bagId: 5639,
+        sproutArr: [5640, 5641, 5642, 5643, 5644],
+        harvestableId: 5645,
+        inventoryId: 5964
     }
 }
 
@@ -158,9 +181,12 @@ let animalInfoAll = {
 
 // create canvas & player object
 function setup() {
-    // imageMode(CENTER);
     createCanvas(960, 480);
     background(255);
+    cnv.parent('gameCanvas');
+    inventory = createGraphics(500, 500);
+    //inventory.image()
+    // inventory = createGraphics(cnv.parent.width, cnv.parent.height)
 
     tilesetArtwork.resize(4736, 2272);
     playerArtwork.resize(128, 128);
@@ -190,8 +216,16 @@ function setup() {
     animalArr.push(cow, cowBaby, chicken, chickenBaby);
 }
 
-function draw() {
+function draw(){
     // draw the world and the character
+
+    if (state === 0){
+    background(113, 143, 63);
+    image(startImage,0,0,960,480);
+    
+
+    }
+    if (state === 1){
     background(113, 143, 63);
     push();
     translate(offsetX, offsetY);
@@ -206,6 +240,7 @@ function draw() {
     animalArr.forEach(animal => {
         animal.moveAndDisplay();
     })
+}
 }
 
 // draw the entire world using the 2D array above
@@ -314,7 +349,7 @@ function isSolid(id) {
         || id == 3856 || id == 3720 || id == 3722 || id == 4588 || id == 4589 || id == 4595 || id == 4596
         || id == 4303 || id == 4304 || id == 4305 || id == 2664 || id == 2220 || id == 4444 || id == 4451
         || id == 2087 || id == 1800 || id == 1948 || id == 1947 || id == 1949 || id == 1945 || id == 1929 || id == 1946
-        || id == 4296 || id == 4592 || id == 4589 || id == 4298 || id == 2732 || id == 2733 || id == 2734 || id == 1399 || id == 1400) {
+        || id == 4296 || id == 4592 || id == 4589 || id == 4298) {
         return true;
     }
     return false;
@@ -337,6 +372,7 @@ function interactOverlay(x, y) {
         setOverlayAtPosition(4299, x, y);
     }
     if (getWorldTileAtPosition(x, y) === 1353) {
+
         if (getOverlayTileAtPosition(x, y) === -1) {
             let plant = new Plant(x, y, 'wheat');
             plantArr.push(plant);
@@ -728,5 +764,15 @@ class Animal {
             }
         }
         imageMode(CORNER);
+    }
+}
+class inventoryItems {
+constructor(){
+    this.items = new Array();
+    this.columns = 5;
+
+}
+    addItem(plant){
+
     }
 }

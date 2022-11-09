@@ -25,9 +25,21 @@
         background-size: cover;
         width: 140px; 
         height: 120px;
-        padding: 0;
-  border: none;
+        /* padding: 0;
+        border: none; */
+        }
+      #gameCanvas{
+        margin: 0;
+        display: flex;
+        /* display: none; */
+
+        /* This centers our sketch horizontally. */
+        justify-content: center;
+
+        /* This centers our sketch vertically. */
+        align-items: center;
       }
+
 
 
     </style>
@@ -38,7 +50,7 @@
     <div id="start">
       <img id="startScreen" src="assets/startScreen.jpg" alt="start screen background" width="1200" height="675">
       
-      <button id="startButton"> </button>
+      <button id="startButton" > click </button>
       <!-- <img id="startButton" src="assets/startButton.png" alt="start button " width="140" height="120"> -->
     </div>
     <div id="gameCanvas">
