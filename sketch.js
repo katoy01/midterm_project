@@ -144,33 +144,33 @@ let world = [
 
 // handle the tile loading and creating our player object in preload before the game can start
 function preload() {
-    tilesetArtwork = loadImage('./assets/global.png');
-    inventoryArtwork = loadImage('./assets/global.png');
-    playerArtwork = loadImage('./assets/player.png');
-    chicken_babyArt = loadImage('./assets/chicken_baby.png');
-    chickenArt = loadImage('./assets/chicken.png');
-    cow_baby_brownArt = loadImage('./assets/cow_baby_brown.png');
-    cow_brownArt = loadImage('./assets/cow_brown.png');
+    tilesetArtwork = loadImage('./assets/image/global.png');
+    inventoryArtwork = loadImage('./assets/image/global.png');
+    playerArtwork = loadImage('./assets/image/player.png');
+    chicken_babyArt = loadImage('./assets/image/chicken_baby.png');
+    chickenArt = loadImage('./assets/image/chicken.png');
+    cow_baby_brownArt = loadImage('./assets/image/cow_baby_brown.png');
+    cow_brownArt = loadImage('./assets/image/cow_brown.png');
 
-    startImage = loadImage("./assets/startScreen.jpg");
-    inventoryCanvas = loadImage("./assets/inventory.png");
+    startImage = loadImage("./assets/image/startScreen.jpg");
+    inventoryCanvas = loadImage("./assets/image/inventory.png");
 
-    inventoryTiles[0] = loadImage('./assets/tomatoseeds.png');
-    inventoryTiles[1] = loadImage('./assets/wheatseeds.png');
-    inventoryTiles[2] = loadImage('./assets/cornseeds.png');
-    inventoryTiles[3] = loadImage('./assets/tomato.png');
-    inventoryTiles[4] = loadImage('./assets/wheat.png');
-    inventoryTiles[5] = loadImage('./assets/corn.png');
-    inventoryTiles[6] = loadImage('./assets/milk.png');
-    inventoryTiles[7] = loadImage('./assets/egg.png');
+    inventoryTiles[0] = loadImage('./assets/image/tomatoseeds.png');
+    inventoryTiles[1] = loadImage('./assets/image/wheatseeds.png');
+    inventoryTiles[2] = loadImage('./assets/image/cornseeds.png');
+    inventoryTiles[3] = loadImage('./assets/image/tomato.png');
+    inventoryTiles[4] = loadImage('./assets/image/wheat.png');
+    inventoryTiles[5] = loadImage('./assets/image/corn.png');
+    inventoryTiles[6] = loadImage('./assets/image/milk.png');
+    inventoryTiles[7] = loadImage('./assets/image/egg.png');
 
-    gate = loadSound("./assets/gate.wav");
-    moo = loadSound("./assets/moo.wav");
-    harvest = loadSound("./assets/harvest_crop.ogg");
-    walk = loadSound("./assets/walk.wav");
-    plop = loadSound("./assets/seed_plant.ogg");
-    cluck = loadSound("./assets/chicken.wav");
-    clickSound = loadSound("./assets/click.wav");
+    gate = loadSound("./assets/sound/gate.wav");
+    moo = loadSound("./assets/sound/moo.wav");
+    harvest = loadSound("./assets/sound/harvest_crop.ogg");
+    walk = loadSound("./assets/sound/walk.wav");
+    plop = loadSound("./assets/sound/seed_plant.ogg");
+    cluck = loadSound("./assets/sound/chicken.wav");
+    clickSound = loadSound("./assets/sound/click.wav");
 
 }
 
