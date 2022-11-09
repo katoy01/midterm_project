@@ -1,11 +1,40 @@
 // graphic to hold all of our tiles as one big image
 let tilesetArtwork, playerArtwork;
 let chicken_babyArt, chickenArt, cow_baby_brownArt, cow_brownArt;
-let state = 1;
+let stage = 0;
 let cnv;
-let inventory;
-let emptyInventory;
+let inventoryCanvas;
 let startImage;
+let inventoryArtwork;
+
+let inventoryArray = [];
+let inventoryTiles = [];
+let displayItems = [];
+let inventoryItems;
+let cornSeeds;
+let wheatSeeds;
+let tomatoSeeds;
+let milk;
+let eggs;
+let corn;
+let tomato;
+let wheat;
+
+let cornSeedsArt, seedsEmpty;
+let wheatSeedsArt;
+let tomatoSeedsArt;
+let milkArt, milkEmpty;
+let eggsArt, eggsEmpty;
+let cornArt, cornEmpty;
+let tomatoArt, tomatoEmpty;
+let wheatArt, wheatEmpty;
+
+var rows;
+var cols;
+var imageW = 60;
+var imageH = 60;
+
+
 
 // let startdiv = select("start");
 // let gamecnv = select("gameCanvas");
@@ -13,6 +42,7 @@ let startImage;
 
 // the size of each tile (32 x 32 square)
 let worldTileSize = 32;
+let inventoryTileSize = 64;
 let playerTileSizeX = 32, playerTileSizeY = 32;
 
 // ofsets for screen scrolling
@@ -110,17 +140,49 @@ let world = [
     //^40th row
 ]
 
+
 // handle the tile loading and creating our player object in preload before the game can start
 function preload() {
     tilesetArtwork = loadImage('./assets/global.png');
+    inventoryArtwork = loadImage('./assets/global.png');
     playerArtwork = loadImage('./assets/player.png');
     chicken_babyArt = loadImage('./assets/chicken_baby.png');
     chickenArt = loadImage('./assets/chicken.png');
     cow_baby_brownArt = loadImage('./assets/cow_baby_brown.png');
     cow_brownArt = loadImage('./assets/cow_brown.png');
+
     startImage = loadImage("./assets/startScreen.jpg");
+    inventoryCanvas = loadImage("./assets/inventory.png");
+
+    inventoryTiles[0] = loadImage('./assets/tomatoseeds.png');
+    inventoryTiles[1] = loadImage('./assets/wheatseeds.png');
+    inventoryTiles[2] = loadImage('./assets/cornseeds.png');
+    inventoryTiles[3] = loadImage('./assets/tomato.png');
+    inventoryTiles[4] = loadImage('./assets/wheat.png');
+    inventoryTiles[5] = loadImage('./assets/corn.png');
+    inventoryTiles[6] = loadImage('./assets/milk.png');
+    inventoryTiles[7] = loadImage('./assets/egg.png');
+
+    // cornSeedsArt = loadImage('./assets/cornseeds.png');
+    //tomatoSeedsArt = loadImage('./assets/tomatoseeds.png');
+    //wheatSeedsArt = loadImage('./assets/wheatseeds.png');
+
+    //cornArt = loadImage('./assets/corn.png');
+    // wheatArt = loadImage('./assets/wheat.png');
+    // tomatoArt = loadImage('./assets/tomato.png');
+
+    // milkArt = loadImage('./assets/milk.png');
+    // eggsArt = loadImage('./assets/egg.png');
+
+    seedsEmpty = loadImage('./assets/emptySeeds.png');
+    cornEmpty = loadImage('./assets/emptyCorn.png');
+    tomatoEmpty = loadImage('./assets/emptyTomato.png');
+    wheatEmpty = loadImage('./assets/emptyWheat.png');
+    milkEmpty = loadImage('./assets/emptyMilk.png');
+    eggsEmpty = loadImage('./assets/emptyEgg.png');
     // startbutton_image = loadImage("./assets/startButton.png");
 }
+
 
 // overlays for our world
 let overlay = [];
@@ -136,13 +198,13 @@ let plantInfoAll = {
         sproutArr: [6380, 6381, 6382, 6383, 6384],
         harvestableId: 6385,
         inventoryId: 5969
-    }
+    },
     'tomato' : {
         bagId: 5195,
         sproutArr: [5196, 5197, 5198, 5199, 5200],
         harvestableId: 5201,
         inventoryId: 5961
-    }
+    },
     'corn' : {
         bagId: 5639,
         sproutArr: [5640, 5641, 5642, 5643, 5644],
@@ -181,14 +243,19 @@ let animalInfoAll = {
 
 // create canvas & player object
 function setup() {
-    createCanvas(960, 480);
+    cnv = createCanvas(960, 480);
     background(255);
     cnv.parent('gameCanvas');
-    inventory = createGraphics(500, 500);
+    // cellWidth = width/columns;
+    // cellHeight = height / 4;
+    inventoryBuffer = createGraphics(500, 500);
     //inventory.image()
     // inventory = createGraphics(cnv.parent.width, cnv.parent.height)
+    rows = 1;
+	cols = 8;
 
     tilesetArtwork.resize(4736, 2272);
+    //inventoryCanvas.resize(960, 480);
     playerArtwork.resize(128, 128);
     chicken_babyArt.resize(128, 160);
     chickenArt.resize(128, 160);
@@ -214,18 +281,37 @@ function setup() {
     chicken = new Animal(66, 13, 'chicken');
     chickenBaby = new Animal(68, 15, 'chickenBaby');
     animalArr.push(cow, cowBaby, chicken, chickenBaby);
+
+    inventoryItems = [
+        cornSeeds = new Item("Corn Seeds", 10, cornSeedsArt),
+        wheatSeeds = new Item("Wheat Seeds", 10, wheatSeedsArt),
+        tomatoSeeds = new Item("Tomato Seeds", 10, tomatoSeedsArt),
+        corn = new Item("Corn",0, cornEmpty),
+        wheat = new Item("Wheat",0,wheatEmpty),
+        tomato = new Item("Tomato",0,tomatoEmpty),
+        milk = new Item("Milk",0, milkEmpty),
+        eggs = new Item("Eggs",0, eggsEmpty)
+        
+    ];
+    console.log(inventoryItems);
+    for (let i of inventoryItems ) {
+       // if(i.amount > 0 ){
+        inventoryArray.push(i);
+       // } 
+    };
+    
+    
 }
 
 function draw(){
     // draw the world and the character
 
-    if (state === 0){
+    if (stage === 0){
     background(113, 143, 63);
     image(startImage,0,0,960,480);
-    
-
     }
-    if (state === 1){
+
+    if (stage === 1){
     background(113, 143, 63);
     push();
     translate(offsetX, offsetY);
@@ -236,11 +322,27 @@ function draw(){
     player.moveAndDisplay();
     plantArr.forEach(plant => {
         plant.display();
-    })
+    });
     animalArr.forEach(animal => {
         animal.moveAndDisplay();
     })
+    
 }
+if (stage === 2 ){
+    background(255);
+    image(inventoryCanvas,0,0,960,480);
+    textAlign(CENTER);
+    fill(247,142,132,255);
+    textSize(50);
+    text("Please enter what number you want to use", width-width/5, height/4);
+    
+   
+}
+
+if (mouseIsPressed == true){
+    stage = 1;
+}
+if (keyPressed == )
 }
 
 // draw the entire world using the 2D array above
@@ -312,6 +414,31 @@ function keyPressed() {
     if (keyCode === 13) {
         player.changeEnvironment();
     }
+    if (keyCode === 49){
+        
+    }
+    if (keyCode === 50){
+        
+    }
+    if (keyCode === 51){
+        
+    }
+    if (keyCode === 52){
+        
+    }
+    if (keyCode === 53){
+        
+    }
+    if (keyCode === 54){
+        
+    }
+    if (keyCode === 55){
+        
+    }
+    if (keyCode === 56){
+        
+    }
+    
 }
 
 
@@ -373,11 +500,22 @@ function interactOverlay(x, y) {
     }
     if (getWorldTileAtPosition(x, y) === 1353) {
 
+        
         if (getOverlayTileAtPosition(x, y) === -1) {
+            stage = 2;
             let plant = new Plant(x, y, 'wheat');
             plantArr.push(plant);
+            wheatSeeds.amount = wheatSeeds.amount - 1;
+            console.log(inventoryArray);
+        }
+        if (getOverlayTileAtPosition(x, y) === 6385){
+            setOverlayAtPosition(1353, x, y);
+            wheat.amount = wheat.amount+1;
+            //inventoryArray.push(wheat.amount);
+            console.log(inventoryArray);
         }
     }
+    
 }
 
 class Player {
@@ -766,13 +904,23 @@ class Animal {
         imageMode(CORNER);
     }
 }
-class inventoryItems {
-constructor(){
-    this.items = new Array();
-    this.columns = 5;
-
-}
-    addItem(plant){
-
+class Item{
+    constructor(itemName,itemAmount,img){
+        this.name = itemName;
+        this.amount = itemAmount;
+        this.graphic = img;
     }
 }
+//put these in setup or draw 
+
+
+// class inventoryItems {
+// constructor(){
+//     this.items = new Array();
+//     this.columns = 5;
+
+// }
+//     addItem(plant){
+
+//     }
+// }
