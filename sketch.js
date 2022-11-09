@@ -161,6 +161,7 @@ let plantArr = [];
 let cow, cowBaby, chicken, chickenBaby;
 let animalArr = [];
 
+// Stores information for all the plants
 let plantInfoAll = {
     'wheat': {
         bagId: 6379,
@@ -182,6 +183,7 @@ let plantInfoAll = {
     }
 }
 
+// Stores information for all the animals
 let animalInfoAll = {
     'cow': {
         img: cow_brownArt,
@@ -201,6 +203,10 @@ let animalInfoAll = {
     }
 }
 
+
+/**
+ * p5 FUNCTIONS
+ */
 
 // Load images and sounds
 function preload() {
@@ -235,11 +241,8 @@ function preload() {
     clickSound = loadSound("./assets/sound/click.wav");
 }
 
-/**
- * p5 FUNCTIONS
- */
-
-// create canvas & player object
+// Create canvas, build world and overlay,
+// create player, create animals
 function setup() {
     cnv = createCanvas(960, 480);
     background(255);
@@ -286,6 +289,7 @@ function setup() {
     chickenBaby = new Animal(68, 15, 'chickenBaby');
     animalArr.push(cow, cowBaby, chicken, chickenBaby);
 
+    // Stores all the items in inventory
     inventoryArray = [
         tomatoSeeds = new Item("Tomato Seeds", 10, inventoryTiles[0]),
         wheatSeeds = new Item("Wheat Seeds", 10, inventoryTiles[1]),
@@ -299,6 +303,8 @@ function setup() {
     // console.log(inventoryArray);
 }
 
+// Triggers when you click mouse to start game and 
+// when you are planting a seed
 function mouseClicked() {
     if (stage === 0) {
         stage = 1;
@@ -309,10 +315,11 @@ function mouseClicked() {
         stage = 1;
         selectedStatus = false;
         numInventorySelected = -1;
-        clickSound.play();
     }
 }
 
+// Triggers when you press `enter` key when you are in the game,
+// or when you press numbers 1-7, or `esc` key when you are in inventory screen
 function keyPressed() {
     if (keyCode === 13 && stage === 1) {
         player.changeEnvironment();
@@ -331,8 +338,9 @@ function keyPressed() {
 
 }
 
+// Has start screen (stage = 0), game screen (stage = 1), and inventory screen (stage = 2)
+// Displays world, overlay, player, animals, and any plants that were planted and are growing
 function draw() {
-    // draw the world and the character
 
     if (stage === 0) {
         background(113, 143, 63);
@@ -363,7 +371,6 @@ function draw() {
         inventoryBuffer.image(inventoryCanvas, 0, 0);
         image(inventoryBuffer, 0, 0);
         displaySelectedBox(numInventorySelected);
-        //image(inventoryCanvas,0,0,960,480);
         textAlign(CENTER);
         fill(0);
         textSize(15);
@@ -386,7 +393,7 @@ function draw() {
  * HELPER FUNCTIONS
  */
 
-// draw the entire world using the 2D array above
+// Draw the entire world using the 2D array above
 function drawWorld() {
     for (let y = 0; y < world.length; y++) {
         for (let x = 0; x < world[y].length; x++) {
@@ -401,7 +408,8 @@ function drawWorld() {
     }
 }
 
-// draw tile with an ID of i and position x,y
+// Draw tile with size `tileSizeX`, `tileSizeY` with an ID of `id` 
+// extracted from the image `img`, at screen position `screenX`, `screenY`
 function drawTile(img, id, tileSizeX, tileSizeY, screenX, screenY) {
     // step 1: figure out how many tiles are on each row of our image
     let tilesPerRow = int(img.width / tileSizeX);
@@ -416,12 +424,14 @@ function drawTile(img, id, tileSizeX, tileSizeY, screenX, screenY) {
         imageX, imageY, tileSizeX, tileSizeY);
 }
 
-// setup our overlay array
+// Setup our overlay array
 function setupOverlay() {
     // set up the overlay to be the same size as the world, just filled with -1's
     for (let y = 0; y < world.length; y++) {
         overlay.push([]);
         for (let x = 0; x < world[y].length; x++) {
+            // adds Gates to our overlay, and deletes it from the world array
+            // so that it's interactable/ changable
             if (world[y][x] === 4299) {
                 overlay[y].push(4299);
                 world[y][x] = 607;
@@ -432,7 +442,7 @@ function setupOverlay() {
     }
 }
 
-// obtain the tile ID at a given screen coordinate
+// Obtain the world tile ID at a given screen coordinate
 function getWorldTileAtPosition(screenX, screenY) {
     // convert screen coordinates into array coordinates
     let arrayX = int((screenX - offsetX) / worldTileSize);
@@ -442,6 +452,7 @@ function getWorldTileAtPosition(screenX, screenY) {
     return id;
 }
 
+// Obtain the overlay tile ID at a given screen coordinate
 function getOverlayTileAtPosition(screenX, screenY) {
     // convert screen coordinates into array coordinates
     let arrayX = int((screenX - offsetX) / worldTileSize);
@@ -451,6 +462,7 @@ function getOverlayTileAtPosition(screenX, screenY) {
     return id;
 }
 
+// Changes overlay tile ID at a given screen coordinate
 function setOverlayAtPosition(id, screenX, screenY) {
     // convert screen coordinates into array coordinates
     let arrayX = int((screenX - offsetX) / worldTileSize);
@@ -461,6 +473,7 @@ function setOverlayAtPosition(id, screenX, screenY) {
     }
 }
 
+// Changes overlay tile ID at a given array position `arrayX`, `arrayY`
 function setOverlayAtPositionArr(id, arrayX, arrayY) {
     // convert screen coordinates into array coordinates
     if (world[arrayY][arrayX] != undefined) {
@@ -468,6 +481,7 @@ function setOverlayAtPositionArr(id, arrayX, arrayY) {
     }
 }
 
+// Returns true if solid tile, false if not solid
 function isSolid(id) {
     // return true for all solid tiles
     if (id === 13 || id == 2370 || id == 3998 || id == 3999 || id == 3850 || id == 3851 || id == 4297 || id == 4296 ||
@@ -491,6 +505,7 @@ function isSolid(id) {
     return false;
 }
 
+// Returns true if there are no animals in that coordinate, false otherwise
 function noAnimals(realX, realY, selfTileSize) {
     for (let index = 0; index < animalArr.length; index++) {
         if (dist(realX, realY, animalArr[index].x, animalArr[index].y) <= (animalArr[index].animalInfo.tileSize / 2 + selfTileSize / 2)) {
@@ -500,8 +515,9 @@ function noAnimals(realX, realY, selfTileSize) {
     return true;
 }
 
+// Player interacts with overlay at position `x`,`y` (triggered once after pressing `enter` button)
 function interactOverlay(x, y) {
-    // console.log(int((x - offsetX) / worldTileSize), int((y - offsetY) / worldTileSize));
+    // open/ close gate
     if (getOverlayTileAtPosition(x, y) === 4299) {
         setOverlayAtPosition(4300, x, y);
         gate.play();
@@ -509,6 +525,7 @@ function interactOverlay(x, y) {
         setOverlayAtPosition(4299, x, y);
         gate.play();
     }
+    // plant or harvest crop
     if (getWorldTileAtPosition(x, y) === 1353) {
         if (getOverlayTileAtPosition(x, y) === -1) {
             stage = 2;
@@ -543,6 +560,7 @@ function interactOverlay(x, y) {
     }
 }
 
+// Displays a white box around selected item in inventory
 function displaySelectedBox(itemNum) {
     if (!selectedStatus) {
         return;
@@ -568,6 +586,8 @@ function displaySelectedBox(itemNum) {
     noStroke();
 }
 
+// Shows a small bar on the bottom of the screen while playing the game
+// that displays the images and numbers of produce you have obtained
 function showProduceInventory() {
     let tileDist = 5;
     let barWidth = tileDist + (inventoryTileSize + tileDist) * 5, barHeight = 42;
@@ -648,6 +668,7 @@ class Player {
         this.computeSensors();
         this.walking = false;
 
+        // movement
         if (keyIsDown(68)) {
             // ellipse(this.right, this.middleY, 5, 5);
             let id = getWorldTileAtPosition(this.right, this.middleY);
@@ -754,6 +775,7 @@ class Plant {
         this.state = 0;
     }
 
+    // count frames and change overlay image
     display() {
         if (this.state === 0) {
             if (this.currentFrames >= this.maxFrames) {
@@ -775,8 +797,6 @@ class Animal {
     constructor(arrayX, arrayY, animalName) {
         this.x = arrayX * worldTileSize;
         this.y = arrayY * worldTileSize;
-
-        // console.log(this.x, this.y);
         this.animalName = animalName;
         this.animalInfo = animalInfoAll[animalName];
         this.spritePos = 0;
@@ -800,6 +820,7 @@ class Animal {
         this.speed = 0.2;
     }
 
+    // there are no animals or players at the place the animal is trying to move
     noAnimalsOrPlayer(realX, realY) {
         for (let index = 0; index < animalArr.length; index++) {
             if (animalArr[index] === this) {
@@ -816,6 +837,7 @@ class Animal {
         return true;
     }
 
+    // get world tile
     getWorldTileAtPosition(realX, realY) {
         // convert screen coordinates into array coordinates
         let arrayX = int(realX / worldTileSize);
@@ -825,6 +847,7 @@ class Animal {
         return id;
     }
 
+    // get overlay tile
     getOverlayTileAtPosition(realX, realY) {
         // convert screen coordinates into array coordinates
         let arrayX = int(realX / worldTileSize);
@@ -834,6 +857,9 @@ class Animal {
         return id;
     }
 
+    // If the player presses `enter` in front of the animal
+    // make the animal look at the player (uses slope logic)
+    // Also harvests produce from adult animals
     lookAtPlayer(screenX, screenY) {
         let realX = screenX - offsetX;
         let realY = screenY - offsetY;
@@ -899,14 +925,14 @@ class Animal {
         this.walkingTimer = 0;
         this.restingTimer = 0;
         this.walking = false;
-
-
-
     }
 
+    // Animals change direction and move randomly in four directions (or sleeps) after a certain amount of time
+    // They check if the place they are trying to go is okay to go to, has constant speed
+    // Also inclues frame animation
     moveAndDisplay() {
         imageMode(CENTER);
-        // this chicken png has the left and right images flipped from the others :(
+        // the chicken png has the left and right images flipped from the others :(
         // how inconvenient
         if (this.animalName === 'chicken') {
             let directionTemp;
@@ -926,6 +952,7 @@ class Animal {
                 this.x + offsetX, this.y + offsetY);
         }
 
+        // the animal is walking
         if (this.walking) {
             if (this.currentFrames >= this.maxFrames) {
                 if (this.spritePos + 1 < this.tilesPerRow) {
@@ -999,6 +1026,9 @@ class Animal {
         imageMode(CORNER);
     }
 }
+
+// The inventory items
+// if it is a seed item, store the produce name for when you harvest it (convenient)
 class Item {
     constructor(itemName, itemAmount, img) {
         this.name = itemName;
