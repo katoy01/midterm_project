@@ -29,7 +29,7 @@ let cornArt, cornEmpty;
 let tomatoArt, tomatoEmpty;
 let wheatArt, wheatEmpty;
 
-let numInventorySelected; 
+let numInventorySelected;
 let selectedStatus = false;
 
 
@@ -192,13 +192,13 @@ let plantInfoAll = {
         harvestableId: 6385,
         inventoryId: 5969
     },
-    'tomato' : {
+    'tomato': {
         bagId: 5195,
         sproutArr: [5196, 5197, 5198, 5199, 5200],
         harvestableId: 5201,
         inventoryId: 5961
     },
-    'corn' : {
+    'corn': {
         bagId: 5639,
         sproutArr: [5640, 5641, 5642, 5643, 5644],
         harvestableId: 5645,
@@ -241,11 +241,11 @@ function setup() {
     cnv.parent('gameCanvas');
     // cellWidth = width/columns;
     // cellHeight = height / 4;
-   
-   
+
+
     // inventory = createGraphics(cnv.parent.width, cnv.parent.height)
     rows = 1;
-	cols = 8;
+    cols = 8;
 
     tilesetArtwork.resize(4736, 2272);
     //inventoryCanvas.resize(960, 480);
@@ -279,104 +279,102 @@ function setup() {
         cornSeeds = new Item("Corn Seeds", 10, cornSeedsArt),
         wheatSeeds = new Item("Wheat Seeds", 10, wheatSeedsArt),
         tomatoSeeds = new Item("Tomato Seeds", 10, tomatoSeedsArt),
-        corn = new Item("Corn",0, cornEmpty),
-        wheat = new Item("Wheat",0,wheatEmpty),
-        tomato = new Item("Tomato",0,tomatoEmpty),
-        milk = new Item("Milk",0, milkEmpty),
-        eggs = new Item("Eggs",0, eggsEmpty)
-        
+        corn = new Item("Corn", 0, cornEmpty),
+        wheat = new Item("Wheat", 0, wheatEmpty),
+        tomato = new Item("Tomato", 0, tomatoEmpty),
+        milk = new Item("Milk", 0, milkEmpty),
+        eggs = new Item("Eggs", 0, eggsEmpty)
     ];
     console.log(inventoryItems);
-    for (let i of inventoryItems ) {
-       // if(i.amount > 0 ){
+    for (let i of inventoryItems) {
+        // if(i.amount > 0 ){
         inventoryArray.push(i);
-       // } 
+        // } 
     };
-    
-    
+
+
 }
 
-function draw(){
+function draw() {
     // draw the world and the character
 
-    if (stage === 0){
-    background(113, 143, 63);
-    image(startImage,0,0,960,480);
+    if (stage === 0) {
+        background(113, 143, 63);
+        image(startImage, 0, 0, 960, 480);
     }
 
-    if (stage === 1){
-    background(113, 143, 63);
-    push();
-    translate(offsetX, offsetY);
-    drawWorld();
-    pop();
+    if (stage === 1) {
+        background(113, 143, 63);
+        push();
+        translate(offsetX, offsetY);
+        drawWorld();
+        pop();
 
-    // the character will always be drawn in the middle of the screen
-    player.moveAndDisplay();
-    plantArr.forEach(plant => {
-        plant.display();
-    });
-    animalArr.forEach(animal => {
-        animal.moveAndDisplay();
-    })
-    
-}
-if (stage === 2 ){
-    background(255);
-    inventoryBuffer = createGraphics(660, 330);
-    inventoryBuffer.image(inventoryCanvas,0,0);
-    image(inventoryBuffer,0,0);
-    //image(inventoryCanvas,0,0,960,480);
-    textAlign(CENTER);
-    fill(0);
-    textSize(15);
-    text("Please enter what number you want to use", width-width/5, height/4);
-    if (selectedStatus == true){
-        if(numInventorySelected == 1){
-            text("You selected tomato seeds. You have "+ tomatoSeeds.amount+" left",width-width/5, height/4+25);
-            text("Click To Continue",width-width/5+20, height/4+50);
+        // the character will always be drawn in the middle of the screen
+        player.moveAndDisplay();
+        plantArr.forEach(plant => {
+            plant.display();
+        });
+        animalArr.forEach(animal => {
+            animal.moveAndDisplay();
+        })
+
+    }
+    if (stage === 2) {
+        background(255);
+        inventoryBuffer = createGraphics(660, 330);
+        inventoryBuffer.image(inventoryCanvas, 0, 0);
+        image(inventoryBuffer, 0, 0);
+        //image(inventoryCanvas,0,0,960,480);
+        textAlign(CENTER);
+        fill(0);
+        textSize(15);
+        text("Please enter what number you want to use", width - width / 5, height / 4);
+        if (selectedStatus == true) {
+            if (numInventorySelected == 1) {
+                text("You selected tomato seeds. You have " + tomatoSeeds.amount + " left", width - width / 5, height / 4 + 25);
+                text("Click To Continue", width - width / 5 + 20, height / 4 + 50);
+            }
+            if (numInventorySelected == 2) {
+                text("You selected wheat seeds. You have " + wheatSeeds.amount + " left", width - width / 5, height / 4 + 25);
+                text("Click To Continue", width - width / 5 + 20, height / 4 + 50);
+            }
+            if (numInventorySelected == 3) {
+                text("You selected corn seeds. You have " + cornSeeds.amount + " left", width - width / 5, height / 4 + 25);
+                text("Click To Continue", width - width / 5 + 20, height / 4 + 50);
+            }
+            if (numInventorySelected == 4) {
+                text("You selected tomatos. You have " + tomato.amount + " left", width - width / 5, height / 4 + 25);
+                text("Click To Continue", width - width / 5 + 20, height / 4 + 50);
+            }
+            if (numInventorySelected == 5) {
+                text("You selected wheat. You have " + wheat.amount + " left", width - width / 5, height / 4 + 25);
+                text("Click To Continue", width - width / 5 + 20, height / 4 + 50);
+            }
+            if (numInventorySelected == 6) {
+                text("You selected corn. You have " + corn.amount + " left", width - width / 5, height / 4 + 25);
+                text("Click To Continue", width - width / 5 + 20, height / 4 + 50);
+            }
+
+            if (numInventorySelected == 7) {
+                text("You selected milk. You have " + milk.amount + " left", width - width / 5, height / 4 + 25);
+                text("Click To Continue", width - width / 5 + 20, height / 4 + 50);
+            }
+            if (numInventorySelected == 8) {
+                text("You selected eggs. You have " + eggs.amount + " left", width - width / 5, height / 4 + 25);
+                text("Click To Continue", width - width / 5 + 20, height / 4 + 50);
+            }
+
         }
-        if(numInventorySelected == 2){
-            text("You selected wheat seeds. You have "+ wheatSeeds.amount+" left",width-width/5, height/4+25);
-            text("Click To Continue",width-width/5+20, height/4+50);
-        }
-        if(numInventorySelected == 3){
-            text("You selected corn seeds. You have "+ cornSeeds.amount+" left",width-width/5, height/4+25);
-            text("Click To Continue",width-width/5+20, height/4+50);
-        }
-        if(numInventorySelected == 4){
-            text("You selected tomatos. You have "+ tomato.amount+" left",width-width/5, height/4+25);
-            text("Click To Continue",width-width/5+20, height/4+50);
-        }
-        if(numInventorySelected == 5){
-            text("You selected wheat. You have "+ wheat.amount+" left",width-width/5, height/4+25);
-            text("Click To Continue",width-width/5+20, height/4+50);
-        }
-        if(numInventorySelected == 6){
-            text("You selected corn. You have "+ corn.amount+" left",width-width/5, height/4+25);
-            text("Click To Continue",width-width/5+20, height/4+50);
-        }
-    
-        if(numInventorySelected == 7){
-            text("You selected milk. You have "+ milk.amount+" left",width-width/5, height/4+25);
-            text("Click To Continue",width-width/5+20, height/4+50);
-        }
-        if(numInventorySelected == 8){
-            text("You selected eggs. You have "+ eggs.amount+" left",width-width/5, height/4+25);
-            text("Click To Continue",width-width/5+20, height/4+50);
-        }
-   
+
+        fill(255);
+
     }
 
-
-    
-   
-}
-
-if (mouseIsPressed == true){
-    stage = 1;
-    mouseIsPressed = false;
-}
+    if (mouseIsPressed == true) {
+        stage = 1;
+        mouseIsPressed = false;
+    }
 
 }
 
@@ -449,39 +447,39 @@ function keyPressed() {
     if (keyCode === 13) {
         player.changeEnvironment();
     }
-    if (keyCode === 49){
+    if (keyCode === 49) {
         selectedStatus = true;
         numInventorySelected = 1;
     }
-    if (keyCode === 50){
+    if (keyCode === 50) {
         selectedStatus = true;
         numInventorySelected = 2;
     }
-    if (keyCode === 51){
+    if (keyCode === 51) {
         selectedStatus = true;
         numInventorySelected = 3;
     }
-    if (keyCode === 52){
+    if (keyCode === 52) {
         selectedStatus = true;
         numInventorySelected = 4;
     }
-    if (keyCode === 53){
+    if (keyCode === 53) {
         selectedStatus = true;
         numInventorySelected = 5;
     }
-    if (keyCode === 54){
+    if (keyCode === 54) {
         selectedStatus = true;
         numInventorySelected = 6;
     }
-    if (keyCode === 55){
+    if (keyCode === 55) {
         selectedStatus = true;
         numInventorySelected = 7;
     }
-    if (keyCode === 56){
+    if (keyCode === 56) {
         selectedStatus = true;
         numInventorySelected = 8;
     }
-    
+
 }
 
 
@@ -542,8 +540,6 @@ function interactOverlay(x, y) {
         setOverlayAtPosition(4299, x, y);
     }
     if (getWorldTileAtPosition(x, y) === 1353) {
-
-        
         if (getOverlayTileAtPosition(x, y) === -1) {
             stage = 2;
             let plant = new Plant(x, y, 'wheat');
@@ -551,14 +547,14 @@ function interactOverlay(x, y) {
             wheatSeeds.amount = wheatSeeds.amount - 1;
             console.log(inventoryArray);
         }
-        if (getOverlayTileAtPosition(x, y) === 6385){
-            setOverlayAtPosition(1353, x, y);
-            wheat.amount = wheat.amount+1;
+        if (getOverlayTileAtPosition(x, y) === 6385) {
+            setOverlayAtPosition(-1, x, y);
+            wheat.amount = wheat.amount + 1;
             //inventoryArray.push(wheat.amount);
             console.log(inventoryArray);
         }
     }
-    
+
 }
 
 class Player {
@@ -590,12 +586,6 @@ class Player {
         this.right = int(this.x + this.tileSize / 2 + 2);
         this.up = int(this.y - this.tileSize / 2 - 2);
         this.down = int(this.y + this.tileSize / 2 + 2);
-        // this.middleX = this.x + (playerTileSizeX / 2);
-        // this.middleY = this.y + (playerTileSizeX / 2);
-        // this.left = int(this.x - 2);
-        // this.right = int(this.x + playerTileSizeX + 2);
-        // this.up = int(this.y - 2);
-        // this.down = int(this.y + playerTileSizeY + 2);
     }
 
     changeEnvironment() {
@@ -690,8 +680,8 @@ class Player {
             this.walking = true;
         }
 
+        // frame animation
         if (this.walking) {
-            // frame animation
             this.pauseCounter--;
 
             if (this.pauseCounter <= 0) {
@@ -947,14 +937,14 @@ class Animal {
         imageMode(CORNER);
     }
 }
-class Item{
-    constructor(itemName,itemAmount,img){
+class Item {
+    constructor(itemName, itemAmount, img) {
         this.name = itemName;
         this.amount = itemAmount;
         this.graphic = img;
     }
 }
-//put these in setup or draw 
+//put these in setup or draw
 
 
 // class inventoryItems {
